@@ -61,5 +61,10 @@ script:
 - >
   cmake -DCMAKE_CXX_COMPILER=${COMPILER} -DCMAKE_BUILD_TYPE=Release -DFACELIFT_DISABLE_DBUS_IPC=${DISABLE_IPC} -DENABLE_MONOLITHIC_BUILD=${MONOLITHIC_BUILD} -DFACELIFT_BUILD_TESTS=ON -DCMAKE_SYSTEM_PREFIX_PATH=$CMAKE_SYSTEM_PREFIX_PATH ..
 - make -j2 && dbus-launch make check && cat ./tests/results.csv
-- tail /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeOutput.log -n 100
-- tail /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeError.log -n 100
+- cat ${COMPILER}
+- cat ${DISABLE_IPC}
+- cat ${MONOLITHIC_BUILD}
+- cat ${CMAKE_SYSTEM_PREFIX_PATH}
+- cat $CMAKE_SYSTEM_PREFIX_PATH
+- cat /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeOutput.log
+- cat /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeError.log
