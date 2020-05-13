@@ -48,10 +48,10 @@ install:
   #######################################################################################
   # Update CMake
   #######################################################################################
-  - dir ${env:ProgramFiles(x86)}
+  - cd C:\projects\deps\cmake
+  - dir
   - set cmakeUninstallPath = "${env:ProgramFiles(x86)}\CMake\Uninstall.exe"
   - cmake --version
-  - echo %cmakeUninstallPath%
   - ps: >-
       If ([IO.File]::Exists($cmakeUninstallPath)) {
         cmake --version
