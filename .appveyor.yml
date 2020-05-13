@@ -50,7 +50,7 @@ install:
   #######################################################################################
   - cd C:\projects\deps\
   - dir
-  - cd "${env:ProgramFiles(x86)}"
+  - cd ${env:ProgramFiles(x86)}
   - dir
   - set cmakeUninstallPath = "${env:ProgramFiles(x86)}\CMake\Uninstall.exe"
   - cmake --version
