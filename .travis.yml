@@ -32,7 +32,7 @@ matrix:
         - ubuntu-toolchain-r-test
         - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
         packages: [ g++-5 libstdc++-6-dev qt512base qt512declarative ]
-    env: COMPILER=g++-5 QT=512 MONOLITHIC_BUILD=ON
+    env: COMPILER=g++-5 QT=512 DISABLE_IPC=ON MONOLITHIC_BUILD=ON
   - os: linux
     compiler: clang          # clang-6.0, Qt5.12.0, IPC enabled
     addons:
