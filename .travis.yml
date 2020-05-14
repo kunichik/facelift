@@ -31,7 +31,10 @@ matrix:
         sources:
         - ubuntu-toolchain-r-test
         - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
-        packages: [ gcc-6 g++-6 libstdc++-6-dev qt512base qt512declarative ]
+        packages: [ gcc-7 g++-7 libstdc++-6-dev qt512base qt512declarative ]
+    script:
+    - export CC=gcc-7
+    - export CXX=g++-7
     env: COMPILER=g++-6 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=ON
   - os: linux
     compiler: clang          # clang-6.0, Qt5.12.0, IPC enabled
