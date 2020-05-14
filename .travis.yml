@@ -21,8 +21,20 @@ addons:
 env: COMPILER=g++-7 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=ON
 
 before_install:
+  - set -e
+  - CMAKE_VERSION=3.17.2
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      #https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2.tar.gz
+      CMAKE_URL="https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION%.*}/cmake-${CMAKE_VERSION}.tar.gz"
+      echo CMAKE_URL=${CMAKE_URL}
+      mkdir cmake-${CMAKE_VERSION} && travis_retry wget --no-check-certificate -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake-${CMAKE_VERSION}
+      export PATH=${PWD}/cmake-${CMAKE_VERSION}/bin:${PATH}
+    fi
   - sudo apt-get install -y gcc-7
   - export CC=/usr/bin/gcc-7
+  
+
 install:
 - sudo apt-get install python3 python3-pip python3-setuptools graphviz doxygen libgl1-mesa-dev qtdeclarative5-private-dev python3-click python3-path python3-pip python3-jinja2 python3-yaml cmake qtdeclarative5-dev qml-module-qtquick-controls qtdeclarative5-private-dev libgtest-dev libpthread-stubs0-dev
 #- sudo add-apt-repository ppa:jonathonf/gcc-7.3 -y
@@ -30,7 +42,7 @@ install:
 #- sudo apt-get install gcc-7 g++-7
 #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7
 - sudo pip3 install antlr4-python3-runtime six pyyaml click typing jinja2 watchdog path.py
-- sudo apt purge --auto-remove cmake && sudo apt install snapd && sudo snap install cmake --classic
+#- sudo apt purge --auto-remove cmake && sudo apt install snapd && sudo snap install cmake --classic
 - cmake --version
 
 before_script:
