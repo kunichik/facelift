@@ -19,6 +19,9 @@ addons:
       - qt512declarative
 env: COMPILER=g++-7 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=ON
 
+before_install:
+  - sudo apt-get install -y gcc-7
+  - export CC=/usr/bin/gcc-7
 install:
 - sudo apt-get install python3 python3-pip python3-setuptools graphviz doxygen libgl1-mesa-dev qtdeclarative5-private-dev python3-click python3-path python3-pip python3-jinja2 python3-yaml cmake qtdeclarative5-dev qml-module-qtquick-controls qtdeclarative5-private-dev libgtest-dev libpthread-stubs0-dev
 #- sudo add-apt-repository ppa:jonathonf/gcc-7.3 -y
