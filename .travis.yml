@@ -17,6 +17,7 @@ addons:
       - libstdc++-6-dev
       - qt512base
       - qt512declarative
+      - cmake
 env: COMPILER=g++-7 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=ON
 
 before_install:
@@ -30,6 +31,7 @@ install:
 #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7
 - sudo pip3 install antlr4-python3-runtime six pyyaml click typing jinja2 watchdog path.py
 - sudo apt purge --auto-remove cmake && sudo apt install snapd && sudo snap install cmake --classic
+- cmake --version
 
 before_script:
 - QTDIR="/opt/qt${QT}"
@@ -45,6 +47,7 @@ script:
 - cd build
 - >
   cmake -DCMAKE_CXX_COMPILER=${COMPILER} -DCMAKE_BUILD_TYPE=Release -DFACELIFT_DISABLE_DBUS_IPC=${DISABLE_IPC} -DENABLE_MONOLITHIC_BUILD=${MONOLITHIC_BUILD} -DFACELIFT_BUILD_TESTS=ON -DCMAKE_SYSTEM_PREFIX_PATH=$CMAKE_SYSTEM_PREFIX_PATH ..
+  cmake --version
 - make -j2 && dbus-launch make check && cat ./tests/results.csv
 #- cat ${COMPILER}
 #- cat ${DISABLE_IPC}
