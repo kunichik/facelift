@@ -31,8 +31,8 @@ matrix:
         sources:
         - ubuntu-toolchain-r-test
         - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
-        packages: [ g++-5 libstdc++-6-dev qt512base qt512declarative ]
-    env: COMPILER=g++-5 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=ON
+        packages: [ gcc-6 g++-6 libstdc++-6-dev qt512base qt512declarative ]
+    env: COMPILER=g++-6 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=ON
   - os: linux
     compiler: clang          # clang-6.0, Qt5.12.0, IPC enabled
     addons:
@@ -65,7 +65,7 @@ script:
 - >
   cmake -DCMAKE_CXX_COMPILER=${COMPILER} -DCMAKE_BUILD_TYPE=Release -DFACELIFT_DISABLE_DBUS_IPC=${DISABLE_IPC} -DENABLE_MONOLITHIC_BUILD=${MONOLITHIC_BUILD} -DFACELIFT_BUILD_TESTS=ON -DCMAKE_SYSTEM_PREFIX_PATH=$CMAKE_SYSTEM_PREFIX_PATH ..
 - make -j2 && dbus-launch make check && cat ./tests/results.csv
-#- cat ${COMPILER}
+- cat ${COMPILER}
 #- cat ${DISABLE_IPC}
 #- cat ${MONOLITHIC_BUILD}
 #- cat ${CMAKE_SYSTEM_PREFIX_PATH}
