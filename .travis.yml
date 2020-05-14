@@ -44,7 +44,7 @@ matrix:
     env: COMPILER=clang++-6.0 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=OFF
 
 install:
-- sudo apt-get install python3 python3-pip python3-setuptools graphviz doxygen libgl1-mesa-dev qtdeclarative5-private-dev python3-click python3-path python3-pip python3-jinja2 python3-yaml cmake qtdeclarative5-dev qml-module-qtquick-controls qtdeclarative5-private-dev
+- sudo apt-get install python3 python3-pip python3-setuptools graphviz doxygen libgl1-mesa-dev qtdeclarative5-private-dev python3-click python3-path python3-pip python3-jinja2 python3-yaml cmake qtdeclarative5-dev qml-module-qtquick-controls qtdeclarative5-private-dev libgtest-dev
 #- sudo add-apt-repository ppa:jonathonf/gcc-7.3 -y
 #- sudo apt-get update
 #- sudo apt-get install gcc-7 g++-7
@@ -65,10 +65,10 @@ script:
 - >
   cmake -DCMAKE_CXX_COMPILER=${COMPILER} -DCMAKE_BUILD_TYPE=Release -DFACELIFT_DISABLE_DBUS_IPC=${DISABLE_IPC} -DENABLE_MONOLITHIC_BUILD=${MONOLITHIC_BUILD} -DFACELIFT_BUILD_TESTS=ON -DCMAKE_SYSTEM_PREFIX_PATH=$CMAKE_SYSTEM_PREFIX_PATH ..
 - make -j2 && dbus-launch make check && cat ./tests/results.csv
-- cat ${COMPILER}
-- cat ${DISABLE_IPC}
-- cat ${MONOLITHIC_BUILD}
-- cat ${CMAKE_SYSTEM_PREFIX_PATH}
-- cat $CMAKE_SYSTEM_PREFIX_PATH
-- cat /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeOutput.log
-- cat /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeError.log
+#- cat ${COMPILER}
+#- cat ${DISABLE_IPC}
+#- cat ${MONOLITHIC_BUILD}
+#- cat ${CMAKE_SYSTEM_PREFIX_PATH}
+#- cat $CMAKE_SYSTEM_PREFIX_PATH
+#- cat /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeOutput.log
+#- cat /home/travis/build/kunichik/facelift/build/CMakeFiles/CMakeError.log
