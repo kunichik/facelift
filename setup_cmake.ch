@@ -10,7 +10,7 @@ make && sudo make install && cd ..
 export PATH="$PWD/cmake-$CMAKE_VERSION/bin:$PATH"
 
 
-##! /bin/bash
+###! /bin/bash
 
 #CMAKE_URL=https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2.tar.gz   
 #mkdir cmake-3.17.2
