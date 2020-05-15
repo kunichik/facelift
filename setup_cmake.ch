@@ -8,5 +8,6 @@ mkdir "cmake-$CMAKE_VERSION"
 travis_retry wget --no-check-certificate -O - $CMAKE_URL | tar --strip-components=1 -xz -C cmake-$CMAKE_VERSION
 cd cmake-$CMAKE_VERSION
 ./bootstrap
-make && sudo make install && cd .. 
+make && sudo make install 
+cd ${THIS_DIR}
 export PATH="$PWD/cmake-$CMAKE_VERSION/bin:$PATH"
