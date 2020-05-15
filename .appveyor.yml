@@ -58,7 +58,7 @@ install:
   - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
   - 7z x cmake.zip -o"C:\Program Files (x86)\CMake\" > nul
   #- set PATH=C:\cmake\bin;%PATH%
-  - cd "C:\Program Files (x86)\CMake\bin"
+  - cd "C:\Program Files (x86)\CMake\"
   - dir  
   - cmake --version
    
