@@ -1,4 +1,6 @@
 #! /bin/bash
+
+THIS_DIR=$PWD
 CMAKE_VERSION=3.17.2
 
 CMAKE_URL="https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION.tar.gz"  
@@ -8,3 +10,4 @@ cd cmake-$CMAKE_VERSION
 ./bootstrap
 make && sudo make install
 export PATH="$PWD/cmake-$CMAKE_VERSION/bin:$PATH"
+cd ${THIS_DIR}
