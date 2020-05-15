@@ -45,25 +45,18 @@ install:
         $env:PATH="C:/projects/deps/doxygen-1.8.10;$env:PATH"
         doxygen --version
       }
+  
   #######################################################################################
-  # Update CMake
+  # Update CMake (we just delete the old CMake files and copy the new ones)
   #######################################################################################
   - cmake --version
-  #- set cmakePath = "${env:Program Files (x86)}\CMake\"
-  - set cmakePath = "C:\Program Files (x86)\CMake\"
-  #- rmdir %cmakePath% /s /q 
   - cd "C:\Program Files (x86)"
   - rmdir "CMake" /s /q 
   - set CMAKE_URL="https://cmake.org/files/v3.17/cmake-3.17.2-win32-x86.zip"
   - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
   - 7z x cmake.zip -o. > nul
   - move cmake-3.17.2-win32-x86 CMake
-  #- set PATH=C:\projects\deps\cmake\bin;%PATH%
-  #- cd C:\projects\deps\cmake\
-  - cd "C:\Program Files (x86)\CMake\bin"
-  - dir
   - cmake --version
-
 
 before_build:
   - cmd: cd %APPVEYOR_BUILD_FOLDER%
