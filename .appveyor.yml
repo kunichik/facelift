@@ -48,19 +48,19 @@ install:
   #######################################################################################
   # Update CMake
   #######################################################################################
-  - cmake --version
+  #- cmake --version
   #- set cmakePath = "${env:Program Files (x86)}\CMake\"
-  - set cmakePath = "C:\Program Files (x86)\CMake\"
+  #- set cmakePath = "C:\Program Files (x86)\CMake\"
   #- rmdir %cmakePath% /s /q 
-  - rmdir "C:\Program Files (x86)\CMake\" /s /q 
-  - mkdir "C:\Program Files (x86)\CMake\"
-  - set CMAKE_URL="https://cmake.org/files/v3.17/cmake-3.17.2-win32-x86.zip"
-  - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
-  - 7z e -o"C:\Program Files (x86)\CMake" cmake.zip > nul
-  - set PATH=C:\projects\deps\cmake\bin;%PATH%
-  - cd C:\projects\deps\cmake\
-  - dir
-  - cmake --version
+  #- rmdir "C:\Program Files (x86)\CMake\" /s /q 
+  #- mkdir "C:\Program Files (x86)\CMake\"
+  #- set CMAKE_URL="https://cmake.org/files/v3.17/cmake-3.17.2-win32-x86.zip"
+  #- appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
+  #- 7z x cmake.zip -o"C:\Program Files (x86)\CMake-1745454" > nul
+  #- set PATH=C:\projects\deps\cmake\bin;%PATH%
+  #- cd C:\projects\deps\cmake\
+  #- dir
+  #- cmake --version
 
 
 before_build:
