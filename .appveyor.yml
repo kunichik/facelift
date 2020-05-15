@@ -53,7 +53,7 @@ install:
   - 7z x cmake.zip -oC:\cmake > nul
   - set PATH=C:\cmake\bin;%PATH%
   - cmake --version
-  - cd "C:\Program Files (x86)"
+  - cd "C:\Program Files (x86)\CMake"
   - dir  
    
 
