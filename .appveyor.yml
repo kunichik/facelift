@@ -50,7 +50,7 @@ install:
   #######################################################################################
   - cmake --version
   - set cmakePath = "${env:Program Files (x86)}\CMake\"
-  - rmdir /s /q %cmakePath%
+  - rmdir %cmakePath% /s /q 
   - mkdir %cmakePath%
   - set CMAKE_URL="https://cmake.org/files/v3.17/cmake-3.17.2-win32-x86.zip"
   - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
