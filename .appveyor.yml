@@ -48,26 +48,10 @@ install:
   #######################################################################################
   # Update CMake
   #######################################################################################
-  - cd C:\projects\deps\
-  - dir
-  - cd $env:ProgramFiles(x86)
-  - dir
-  - set cmakeUninstallPath = "${env:ProgramFiles(x86)}\CMake\Uninstall.exe"
-  - cmake --version
-  - ps: >-
-      If ([System.IO.File]::Exists($cmakeUninstallPath)) {
-        cmake --version
-        Write-Host "Uninstalling previous CMake version." -ForegroundColor Cyan
-        # uninstall existent
-        "`"$cmakeUninstallPath`" /S" | out-file ".\uninstall-cmake.cmd" -Encoding ASCII
-        & .\uninstall-cmake.cmd
-        del .\uninstall-cmake.cmd
-        Start-Sleep -s 10
-      }
-  - set CMAKE_URL="https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2-win64-x64.zip"
+  - set CMAKE_URL: "https://cmake.org/files/v3.17/cmake-3.17.2-win32-x86.zip"
   - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
-  - 7z x cmake.zip -oC:\projects\deps\cmake > nul
-  - set PATH=C:\projects\deps\cmake;%PATH%
+  - 7z x cmake.zip -oC:\cmake > nul
+  - set PATH=C:\cmake\bin;%PATH%
   - cmake --version
    
 
