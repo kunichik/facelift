@@ -53,10 +53,13 @@ install:
   - set cmakePath = "C:\Program Files (x86)\CMake\"
   #- rmdir %cmakePath% /s /q 
   - rmdir "C:\Program Files (x86)\CMake\" /s /q 
+  - set CMAKE_URL="https://cmake.org/files/v3.17/cmake-3.17.2-win32-x86.zip"
   - appveyor DownloadFile %CMAKE_URL% -FileName cmake.zip
   - 7z x cmake.zip -oC:\projects\deps\cmake > nul
   - set PATH=C:\projects\deps\cmake\bin;%PATH%
   - cmake --version
+  - cd C:\projects\deps\cmake\
+  - dir
 
 before_build:
   - cmd: cd %APPVEYOR_BUILD_FOLDER%
