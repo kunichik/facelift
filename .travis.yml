@@ -39,7 +39,7 @@ matrix:
       apt:
         sources:
         - ubuntu-toolchain-r-test
-        - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial'
+        - sourceline: 'ppa:beineri/opt-qt-5.12.0-xenial' 
         packages: [ clang-6.0 libstdc++-6-dev qt512base qt512declarative ]
     env: COMPILER=clang++-6.0 QT=512 DISABLE_IPC=OFF MONOLITHIC_BUILD=OFF
 
