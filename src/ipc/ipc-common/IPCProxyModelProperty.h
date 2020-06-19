@@ -194,6 +194,9 @@ public:
                 m_proxy.ipc()->sendAsyncMethodCall(requestMemberID, facelift::AsyncAnswer<QList<ModelDataType> >(&m_proxy, [this, first,
                         last](QList<ModelDataType> list) {
                         //                    qCDebug(LogIpc) << "Received model items " << first << "-" << last;
+                        if(list.empty()) {
+                            return;
+                        }                            
                         for (int i = first; i <= last; ++i) {
                             auto &newItem = list[i - first];
                             if (!((m_cache.exists(i)) && (newItem == m_cache.get(i)))) {
