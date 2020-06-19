@@ -142,7 +142,9 @@ public:
                 QList<ModelDataType> list;
                 m_proxy.ipc()->sendMethodCallWithReturn(requestMemberID, list, first, last);
 
-                Q_ASSERT(list.size() == (last - first + 1));
+                if (list.size() != (last - first + 1) || list.empty()) {
+                    return ModelDataType {};
+                }  
 
                 for (int i = first; i <= last; ++i) {
                     m_cache.insert(i, list.at(i - first));
@@ -193,10 +195,7 @@ public:
             if (first <= last) {
                 m_proxy.ipc()->sendAsyncMethodCall(requestMemberID, facelift::AsyncAnswer<QList<ModelDataType> >(&m_proxy, [this, first,
                         last](QList<ModelDataType> list) {
-                        //                    qCDebug(LogIpc) << "Received model items " << first << "-" << last;
-                        if(list.empty()) {
-                            return;
-                        }                            
+                        //                    qCDebug(LogIpc) << "Received model items " << first << "-" << last;                          
                         for (int i = first; i <= last; ++i) {
                             auto &newItem = list[i - first];
                             if (!((m_cache.exists(i)) && (newItem == m_cache.get(i)))) {
