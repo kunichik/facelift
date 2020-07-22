@@ -12,6 +12,8 @@ facelift_add_library(FaceliftIPCCommonLib
         InterfaceManager.cpp
         IPCProxyNewBase.cpp
         NewIPCServiceAdapterBase.cpp
+        OutputPayLoad.cpp
+        InputPayLoad.cpp
     HEADERS
         ipc-common.h
         NotAvailableImpl.h
@@ -31,6 +33,8 @@ facelift_add_library(FaceliftIPCCommonLib
         IPCAdapterFactoryManager.h
         IPCServiceAdapter.h
         Registry.h
+        InputPayLoad.h
+        OutputPayLoad.h
     LINK_LIBRARIES FaceliftModelLib FaceliftCommonLib
     MONOLITHIC_SUPPORTED
 )

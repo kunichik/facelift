@@ -39,6 +39,8 @@
 #include <QDataStream>
 
 #include "FaceliftModel.h"
+#include "InputPayLoad.h"
+#include "OutputPayLoad.h"
 
 namespace facelift {
 
@@ -174,64 +176,6 @@ struct IPCTypeRegisterHandler<Type *, typename std::enable_if<std::is_base_of<In
         v = owner.template getOrCreateSubProxy<IPCProxyType>(serializedValue);
     }
 
-};
-
-
-class FaceliftIPCCommonLib_EXPORT OutputPayLoad
-{
-
-public:
-    OutputPayLoad(QByteArray &payloadArray) : m_payloadArray(payloadArray), m_dataStream(&m_payloadArray, QIODevice::WriteOnly)
-    {
-    }
-
-    template<typename Type>
-    void writeSimple(const Type &v)
-    {
-        //        qCDebug(LogIpc) << "Writing to message : " << v;
-        m_dataStream << v;
-    }
-
-    const QByteArray &getContent() const
-    {
-        return m_payloadArray;
-    }
-
-private:
-    QByteArray& m_payloadArray;
-    QDataStream m_dataStream;
-};
-
-
-class FaceliftIPCCommonLib_EXPORT InputPayLoad
-{
-
-public:
-    InputPayLoad(const QByteArray &payloadArray) :
-        m_payloadArray(payloadArray),
-        m_dataStream(m_payloadArray)
-    {
-    }
-
-    ~InputPayLoad()
-    {
-    }
-
-    template<typename Type>
-    void readNextParameter(Type &v)
-    {
-        m_dataStream >> v;
-        //        qCDebug(LogIpc) << "Read from message : " << v;
-    }
-
-    const QByteArray &getContent() const
-    {
-        return m_payloadArray;
-    }
-
-private:
-    const QByteArray& m_payloadArray;
-    QDataStream m_dataStream;
 };
 
 
