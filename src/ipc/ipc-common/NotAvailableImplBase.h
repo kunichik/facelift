@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -27,26 +27,25 @@
 ** SPDX-License-Identifier: MIT
 **
 **********************************************************************/
-#include "NotAvailableImpl.h"
-#include "ipc-common.h"
+#pragma once
+
+#include "FaceliftModel.h"
+
+#if defined(FaceliftIPCCommonLib_LIBRARY)
+#  define FaceliftIPCCommonLib_EXPORT Q_DECL_EXPORT
+#else
+#  define FaceliftIPCCommonLib_EXPORT Q_DECL_IMPORT
+#endif
 
 namespace facelift {
 
-void NotAvailableImplBase::logMethodCall(const InterfaceBase &i, const char *methodName)
+class FaceliftIPCCommonLib_EXPORT NotAvailableImplBase
 {
-    qCCritical(LogIpc).nospace().noquote() << "Can not call method \"" << methodName << "(...)\" on IPC proxy for interface \"" << i.interfaceID()
-                                           << "\". Make sure that the corresponding server is registered";
-}
 
-void NotAvailableImplBase::logSetterCall(const InterfaceBase &i, const char *propertyName)
-{
-    qCCritical(LogIpc).nospace().noquote() << "Can not call setter of property \"" << propertyName << "\" on IPC proxy for interface \"" << i.interfaceID()
-                                           << "\". Make sure that the corresponding server is registered";
-}
-
-void NotAvailableImplBase::logGetterCall(const InterfaceBase &i, const char *propertyName)
-{
-    qCDebug(LogIpc) << "Getter of property" << propertyName << "is called" << i.interfaceID() << &i << i.interfaceID();
-}
+protected:
+    static void logMethodCall(const InterfaceBase &i, const char *methodName);
+    static void logSetterCall(const InterfaceBase &i, const char *propertyName);
+    static void logGetterCall(const InterfaceBase &i, const char *propertyName);
+};
 
 }

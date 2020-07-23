@@ -6,7 +6,7 @@ facelift_add_library(FaceliftIPCCommonLib
         ModuleIPCBase.cpp
         ipc-serialization.cpp
         IPCServiceAdapterBase.cpp
-        NotAvailableImpl.cpp
+        NotAvailableImplBase.cpp
         IPCAdapterFactoryManager.cpp
         IPCAttachedPropertyFactory.cpp
         IPCProxyBinderBase.cpp
@@ -19,6 +19,7 @@ facelift_add_library(FaceliftIPCCommonLib
     HEADERS
         ipc-common.h
         NotAvailableImpl.h
+        NotAvailableImplBase.h
         IPCProxyNewBase.h
         LocalProviderBinder.h
         LocalProviderBinderBase.h
