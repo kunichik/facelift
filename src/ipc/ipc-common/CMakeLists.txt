@@ -15,11 +15,13 @@ facelift_add_library(FaceliftIPCCommonLib
         NewIPCServiceAdapterBase.cpp
         OutputPayLoad.cpp
         InputPayLoad.cpp
+        LocalProviderBinderBase.cpp
     HEADERS
         ipc-common.h
         NotAvailableImpl.h
         IPCProxyNewBase.h
         LocalProviderBinder.h
+        LocalProviderBinderBase.h
         StaticArrayReference.h
         IPCProxyBase.h
         IPCProxy.h

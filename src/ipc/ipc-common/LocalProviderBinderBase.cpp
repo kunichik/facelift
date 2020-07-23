@@ -29,10 +29,7 @@
 **********************************************************************/
 #pragma once
 
-#include <QObject>
 #include "LocalProviderBinderBase.h"
-#include "InterfaceManager.h"
-#include "IPCProxyNewBase.h"
 
 #if defined(FaceliftIPCCommonLib_LIBRARY)
 #  define FaceliftIPCCommonLib_EXPORT Q_DECL_EXPORT
@@ -42,49 +39,15 @@
 
 namespace facelift {
 
-template<typename InterfaceType>
-class LocalProviderBinder : public LocalProviderBinderBase
+LocalProviderBinderBase::LocalProviderBinderBase(IPCProxyNewBase &proxy) : m_proxy(proxy)
 {
+}
 
-public:
-    LocalProviderBinder(IPCProxyNewBase &proxy) : LocalProviderBinderBase(proxy)
-    {
-    }
-
-    void checkLocalAdapterAvailability() override
-    {
-        auto adapter = m_interfaceManager.getAdapter(m_proxy.objectPath());
-
-        if (adapter) {
-            auto* service = m_interfaceManager.serviceMatches(m_proxy.objectPath(), adapter);
-            if (service) {
-                auto provider = qobject_cast<InterfaceType *>(service);
-                if (provider != m_provider) {
-                    m_provider = provider;
-                    m_adapter = adapter;
-                    if (m_provider) {
-                        qCDebug(LogIpc) << "Local server found for " << m_proxy.objectPath();
-                        m_proxy.refreshProvider();
-                    }
-                }
-            }
-        } else {
-            if (m_adapter != nullptr) {
-                m_provider = nullptr;
-                m_adapter = nullptr;
-                m_proxy.refreshProvider();
-            }
-        }
-    }
-
-    InterfaceType *provider()
-    {
-        return m_provider;
-    }
-
-private:
-    QPointer<InterfaceType> m_provider;
-    QPointer<NewIPCServiceAdapterBase> m_adapter;
-};
+void LocalProviderBinderBase::init()
+{
+    m_interfaceManager.content().addListener(m_proxy.objectPath(),
+            this, &LocalProviderBinderBase::checkLocalAdapterAvailability);
+    checkLocalAdapterAvailability();
+}
 
 }

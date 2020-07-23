@@ -30,7 +30,6 @@
 #pragma once
 
 #include <QObject>
-#include "LocalProviderBinderBase.h"
 #include "InterfaceManager.h"
 #include "IPCProxyNewBase.h"
 
@@ -42,49 +41,19 @@
 
 namespace facelift {
 
-template<typename InterfaceType>
-class LocalProviderBinder : public LocalProviderBinderBase
-{
+class LocalProviderBinderBase : public QObject {
 
 public:
-    LocalProviderBinder(IPCProxyNewBase &proxy) : LocalProviderBinderBase(proxy)
-    {
-    }
 
-    void checkLocalAdapterAvailability() override
-    {
-        auto adapter = m_interfaceManager.getAdapter(m_proxy.objectPath());
+    LocalProviderBinderBase(IPCProxyNewBase &proxy);
 
-        if (adapter) {
-            auto* service = m_interfaceManager.serviceMatches(m_proxy.objectPath(), adapter);
-            if (service) {
-                auto provider = qobject_cast<InterfaceType *>(service);
-                if (provider != m_provider) {
-                    m_provider = provider;
-                    m_adapter = adapter;
-                    if (m_provider) {
-                        qCDebug(LogIpc) << "Local server found for " << m_proxy.objectPath();
-                        m_proxy.refreshProvider();
-                    }
-                }
-            }
-        } else {
-            if (m_adapter != nullptr) {
-                m_provider = nullptr;
-                m_adapter = nullptr;
-                m_proxy.refreshProvider();
-            }
-        }
-    }
+    virtual void checkLocalAdapterAvailability() = 0;
 
-    InterfaceType *provider()
-    {
-        return m_provider;
-    }
+    void init();
 
-private:
-    QPointer<InterfaceType> m_provider;
-    QPointer<NewIPCServiceAdapterBase> m_adapter;
+protected:
+    IPCProxyNewBase &m_proxy;
+    InterfaceManager &m_interfaceManager = InterfaceManager::instance();
 };
 
 }
