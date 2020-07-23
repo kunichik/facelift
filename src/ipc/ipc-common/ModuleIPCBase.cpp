@@ -32,7 +32,7 @@
 #include "ipc-common.h"
 #include <QtQml>
 #include "NewIPCServiceAdapterBase.h"
-#include "IPCAdapterFactoryManager.h"
+#include "IPCAttachedPropertyFactory.h"
 #include "IPCProxyBinderBase.h"
 
 

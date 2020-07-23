@@ -27,17 +27,33 @@
 ** SPDX-License-Identifier: MIT
 **
 **********************************************************************/
-#include "OutputPayLoad.h"
+#pragma once
+
+#include "NewIPCServiceAdapterBase.h"
+
+#if defined(FaceliftIPCCommonLib_LIBRARY)
+#  define FaceliftIPCCommonLib_EXPORT Q_DECL_EXPORT
+#else
+#  define FaceliftIPCCommonLib_EXPORT Q_DECL_IMPORT
+#endif
 
 namespace facelift {
 
-OutputPayLoad::OutputPayLoad(QByteArray &payloadArray) : m_payloadArray(payloadArray), m_dataStream(&m_payloadArray, QIODevice::WriteOnly)
+class NewIPCServiceAdapterBase;
+
+class FaceliftIPCCommonLib_EXPORT IPCAttachedPropertyFactory : public QObject
 {
+    Q_OBJECT
+
+public:
+    IPCAttachedPropertyFactory(QObject *parent);
+
+    static InterfaceBase *getProvider(QObject *object);
+
+    static NewIPCServiceAdapterBase *qmlAttachedProperties(QObject *object);
+
+};
+
 }
 
-const QByteArray &OutputPayLoad::getContent() const
-{
-    return m_payloadArray;
-}
-
-}
+QML_DECLARE_TYPEINFO(facelift::IPCAttachedPropertyFactory, QML_HAS_ATTACHED_PROPERTIES)

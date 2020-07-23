@@ -8,6 +8,7 @@ facelift_add_library(FaceliftIPCCommonLib
         IPCServiceAdapterBase.cpp
         NotAvailableImpl.cpp
         IPCAdapterFactoryManager.cpp
+        IPCAttachedPropertyFactory.cpp
         IPCProxyBinderBase.cpp
         InterfaceManager.cpp
         IPCProxyNewBase.cpp
@@ -31,6 +32,7 @@ facelift_add_library(FaceliftIPCCommonLib
         ModuleIPCBase.h
         ipc-serialization.h
         IPCAdapterFactoryManager.h
+        IPCAttachedPropertyFactory.h
         IPCServiceAdapter.h
         Registry.h
         InputPayLoad.h
