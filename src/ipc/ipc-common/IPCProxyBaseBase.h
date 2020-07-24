@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2020 Luxoft Sweden AB
+** Copyright (C) 2018 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -31,9 +31,6 @@
 #pragma once
 
 #include "ipc-common.h"
-#include "IPCProxyBaseBase.h"
-#include "IPCProxyBinderBase.h"
-
 
 #if defined(FaceliftIPCCommonLib_LIBRARY)
 #  define FaceliftIPCCommonLib_EXPORT Q_DECL_EXPORT
@@ -43,68 +40,11 @@
 
 namespace facelift {
 
-template<typename AdapterType>
-class IPCProxyBase : public AdapterType, protected IPCProxyBaseBase
-{
+class FaceliftIPCCommonLib_EXPORT IPCProxyBaseBase {
 
 public:
-    using InterfaceType = AdapterType;
 
-public:
-    IPCProxyBase(QObject *parent) : AdapterType(parent)
-    {
-    }
-
-    template<typename BinderType>
-    void initBinder(BinderType &binder)
-    {
-        m_ipcBinder = &binder;
-        QObject::connect(this, &InterfaceBase::componentCompleted, &binder, &BinderType::onComponentCompleted);
-    }
-
-    bool isSynchronous() const
-    {
-        return m_ipcBinder->isSynchronous();
-    }
-
-    bool ready() const override final
-    {
-        auto r = m_serviceReady;
-        return r;
-    }
-
-    template<typename ProxyType>
-    class InterfacePropertyIPCProxyHandler
-    {
-
-    public:
-        InterfacePropertyIPCProxyHandler(IPCProxyBase &owner) : m_owner(owner)
-        {
-        }
-
-        void update(const QString &objectPath)
-        {
-            if (m_proxy && (m_proxy->ipc()->objectPath() != objectPath)) {
-                m_proxy = nullptr;
-            }
-            if (!m_proxy) {
-                m_proxy = m_owner.m_ipcBinder->template getOrCreateSubProxy<ProxyType>(objectPath);
-            }
-        }
-
-        ProxyType *getValue() const
-        {
-            return m_proxy;
-        }
-
-    private:
-        QPointer<ProxyType> m_proxy;
-        IPCProxyBase &m_owner;
-    };
-
-protected:
-    bool m_serviceReady = false;
-    IPCProxyBinderBase *m_ipcBinder = nullptr;
+    void deserializeCommonSignal(facelift::CommonSignalID signalID, InterfaceBase* i);
 
 };
 

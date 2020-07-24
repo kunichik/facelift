@@ -71,4 +71,50 @@ void IPCProxyBinderBase::setServiceName(const QString &name)
     checkInit();
 }
 
+bool IPCProxyBinderBase::enabled() const
+{
+    return m_enabled;
+}
+
+void IPCProxyBinderBase::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+    checkInit();
+}
+
+const QString &IPCProxyBinderBase::objectPath() const
+{
+    return m_objectPath;
+}
+
+void IPCProxyBinderBase::setObjectPath(const QString &objectPath)
+{
+    m_objectPath = objectPath;
+    checkInit();
+}
+
+void IPCProxyBinderBase::bindToIPC()
+{
+}
+
+bool IPCProxyBinderBase::isServiceAvailable() const {
+    Q_ASSERT(false); // TODO: remove
+    return true;
+}
+
+InterfaceBase &IPCProxyBinderBase::owner()
+{
+    return m_owner;
+}
+
+void IPCProxyBinderBase::setSynchronous(bool isSynchronous)
+{
+    m_isSynchronous = isSynchronous;
+}
+
+bool IPCProxyBinderBase::isSynchronous() const
+{
+    return m_isSynchronous;
+}
+
 } // end namespace facelift

@@ -2,7 +2,7 @@
 facelift_add_library(FaceliftIPCCommonLib
     SOURCES
         ipc-common.cpp
-        IPCProxyBase.cpp
+        IPCProxyBaseBase.cpp
         ModuleIPCBase.cpp
         ipc-serialization.cpp
         IPCServiceAdapterBase.cpp
@@ -24,8 +24,10 @@ facelift_add_library(FaceliftIPCCommonLib
         LocalProviderBinder.h
         LocalProviderBinderBase.h
         StaticArrayReference.h
+        IPCProxyBaseBase.h
         IPCProxyBase.h
         IPCProxy.h
+        IPCTypeHandler.h
         InterfaceManager.h
         IPCProxyModelProperty.h
         IPCProxyBinderBase.h

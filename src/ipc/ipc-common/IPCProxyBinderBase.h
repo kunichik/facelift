@@ -58,27 +58,13 @@ public:
 
     void setServiceName(const QString &name);
 
-    bool enabled() const
-    {
-        return m_enabled;
-    }
+    bool enabled() const;
 
-    void setEnabled(bool enabled)
-    {
-        m_enabled = enabled;
-        checkInit();
-    }
+    void setEnabled(bool enabled);
 
-    const QString &objectPath() const
-    {
-        return m_objectPath;
-    }
+    const QString &objectPath() const;
 
-    virtual void setObjectPath(const QString &objectPath)
-    {
-        m_objectPath = objectPath;
-        checkInit();
-    }
+    virtual void setObjectPath(const QString &objectPath);
 
     void onComponentCompleted();
 
@@ -91,23 +77,15 @@ public:
      */
     void connectToServer();
 
-    virtual void bindToIPC()
-    {
-    }
+    virtual void bindToIPC();
 
     Q_SIGNAL void complete();
 
     Q_SIGNAL void serviceAvailableChanged();
 
-    virtual bool isServiceAvailable() const {
-        Q_ASSERT(false); // TODO: remove
-        return true;
-    }
+    virtual bool isServiceAvailable() const;
 
-    InterfaceBase &owner()
-    {
-        return m_owner;
-    }
+    InterfaceBase &owner();
 
     template<typename SubInterfaceProxyType>
     SubInterfaceProxyType *getOrCreateSubProxy(const QString &objectPath)
@@ -129,18 +107,13 @@ public:
         return proxy;
     }
 
-    void setSynchronous(bool isSynchronous)
-    {
-        m_isSynchronous = isSynchronous;
-    }
+    void setSynchronous(bool isSynchronous);
+    bool isSynchronous() const;
 
-    bool isSynchronous() const
-    {
-        return m_isSynchronous;
-    }
 protected:
     bool m_explicitServiceName = false;
     QString m_serviceName;
+
 private:
     QMap<QString, IPCProxyBinderBase *> m_subProxies;
     QString m_objectPath;
