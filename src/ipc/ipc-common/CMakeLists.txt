@@ -40,6 +40,7 @@ facelift_add_library(FaceliftIPCCommonLib
         Registry.h
         InputPayLoad.h
         OutputPayLoad.h
+        DBusSignatureHelper.h
     LINK_LIBRARIES FaceliftModelLib FaceliftCommonLib
     MONOLITHIC_SUPPORTED
 )

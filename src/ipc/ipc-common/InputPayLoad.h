@@ -46,7 +46,7 @@ class FaceliftIPCCommonLib_EXPORT InputPayLoad
 public:
     InputPayLoad(const QByteArray &payloadArray);
 
-    ~InputPayLoad() = default;
+    ~InputPayLoad();
 
     template<typename Type>
     void readNextParameter(Type &v)

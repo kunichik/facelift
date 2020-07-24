@@ -84,5 +84,9 @@ InterfaceManager &InterfaceManager::instance()
     return *manager;
 }
 
+Registry<QPointer<NewIPCServiceAdapterBase>>& InterfaceManager::content()
+{
+    return m_registry;
+}
 
 }

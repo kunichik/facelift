@@ -41,6 +41,7 @@
 #include "FaceliftModel.h"
 #include "InputPayLoad.h"
 #include "OutputPayLoad.h"
+#include "DBusSignatureHelper.h"
 
 namespace facelift {
 
@@ -72,8 +73,6 @@ inline void assignDefaultValue(Type &v)
 {
     v = Type {};
 }
-
-
 
 template<typename Type, typename Enable = void>
 struct IPCTypeRegisterHandler
@@ -177,28 +176,6 @@ struct IPCTypeRegisterHandler<Type *, typename std::enable_if<std::is_base_of<In
     }
 
 };
-
-
-template<typename Type, typename Enable = void>
-struct IPCTypeHandler
-{
-    static void writeDBUSSignature(QTextStream &s)
-    {
-        s << "i";
-    }
-
-    static void write(OutputPayLoad &msg, const Type &v)
-    {
-        msg.writeSimple(v);
-    }
-
-    static void read(InputPayLoad &msg, Type &v)
-    {
-        msg.readNextParameter(v);
-    }
-
-};
-
 
 }
 

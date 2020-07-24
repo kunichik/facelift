@@ -37,6 +37,8 @@ InputPayLoad::InputPayLoad(const QByteArray &payloadArray) :
 {
 }
 
+InputPayLoad::~InputPayLoad() = default;
+
 const QByteArray &InputPayLoad::getContent() const
 {
     return m_payloadArray;
