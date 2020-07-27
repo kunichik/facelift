@@ -47,15 +47,9 @@ public:
 
     virtual void refreshProvider() = 0;
 
-    const QString &objectPath() const
-    {
-        return m_ipc.objectPath();
-    }
+    const QString &objectPath() const;
 
-    IPCProxyBinderBase *ipc()
-    {
-        return &m_ipc;
-    }
+    IPCProxyBinderBase *ipc();
 
 private:
     facelift::IPCProxyBinderBase m_ipc;

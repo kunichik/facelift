@@ -49,15 +49,9 @@ class FaceliftIPCCommonLib_EXPORT IPCServiceAdapterBase : public QObject
 public:
     IPCServiceAdapterBase(QObject *parent = nullptr);
 
-    const QString &interfaceName() const
-    {
-        return m_interfaceName;
-    }
+    const QString &interfaceName() const;
 
-    void setInterfaceName(const QString &name)
-    {
-        m_interfaceName = name;
-    }
+    void setInterfaceName(const QString &name);
 
     virtual void registerService() = 0;
 
@@ -65,15 +59,9 @@ public:
 
     virtual InterfaceBase *service() const = 0;
 
-    const QString &objectPath() const
-    {
-        return m_objectPath;
-    }
+    const QString &objectPath() const;
 
-    void setObjectPath(const QString &objectPath)
-    {
-        m_objectPath = objectPath;
-    }
+    void setObjectPath(const QString &objectPath);
 
     virtual void registerService(const QString &objectPath, InterfaceBase* serverObject) = 0;
 

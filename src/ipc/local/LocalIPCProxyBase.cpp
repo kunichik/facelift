@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2019 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,40 +28,16 @@
 **
 **********************************************************************/
 
-#include "IPCServiceAdapterBase.h"
+#include "LocalIPCProxyBase.h"
 
 namespace facelift {
 
-IPCServiceAdapterBase::IPCServiceAdapterBase(QObject *parent) : QObject(parent)
+namespace local {
+
+LocalIPCProxyBase::LocalIPCProxyBase(LocalIPCProxyBinder &ipcBinder) : m_ipcBinder(ipcBinder)
 {
 }
 
-QString IPCServiceAdapterBase::generateObjectPath(const QString &parentPath) const
-{
-    static int s_nextInstanceID = 0;
-    QString path = parentPath + "/dynamic";
-    path += QString::number(s_nextInstanceID++);
-    return path;
-}
-
-const QString &IPCServiceAdapterBase::interfaceName() const
-{
-    return m_interfaceName;
-}
-
-void IPCServiceAdapterBase::setInterfaceName(const QString &name)
-{
-    m_interfaceName = name;
-}
-
-const QString &IPCServiceAdapterBase::objectPath() const
-{
-    return m_objectPath;
-}
-
-void IPCServiceAdapterBase::setObjectPath(const QString &objectPath)
-{
-    m_objectPath = objectPath;
 }
 
 }

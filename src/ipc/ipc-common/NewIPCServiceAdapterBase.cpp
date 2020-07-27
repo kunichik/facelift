@@ -88,4 +88,45 @@ void NewIPCServiceAdapterBase::onValueChanged()
     }
 }
 
+bool NewIPCServiceAdapterBase::enabled() const
+{
+    return m_enabled;
+}
+
+void NewIPCServiceAdapterBase::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+    onValueChanged();
+}
+
+void NewIPCServiceAdapterBase::checkedSetService(QObject *service)
+{
+    setService(service);
+    onValueChanged();
+}
+
+const QString &NewIPCServiceAdapterBase::objectPath() const
+{
+    return m_objectPath;
+}
+
+void NewIPCServiceAdapterBase::setObjectPath(const QString &objectPath)
+{
+    m_objectPath = objectPath;
+    onValueChanged();
+}
+
+bool NewIPCServiceAdapterBase::isReady() const
+{
+    return (enabled() && m_providerReady && !objectPath().isEmpty() && (service() != nullptr));
+}
+
+void NewIPCServiceAdapterBase::onProviderCompleted()
+{
+    // The parsing of the provider is finished => all our properties are set and we are ready to register our service
+    m_providerReady = true;
+    onValueChanged();
+}
+
+
 }

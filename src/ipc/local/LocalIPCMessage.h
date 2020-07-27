@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2019 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -69,87 +69,35 @@ class FaceliftIPCLocalLib_EXPORT LocalIPCMessage
 public:
     using ReplyFunction = std::function<void(LocalIPCMessage &)>;
 
-    LocalIPCMessage()
-    {
-    }
+    LocalIPCMessage();
 
-    LocalIPCMessage(const char *methodName)
-    {
-        m_data.m_member = methodName;
-    }
+    LocalIPCMessage(const char *methodName);
 
-    LocalIPCMessage(const LocalIPCMessage &other)
-    {
-        m_data = other.m_data;
-        copyRequestMessage(other);
-    }
+    LocalIPCMessage(const LocalIPCMessage &other);
 
-    LocalIPCMessage &operator=(const LocalIPCMessage &other)
-    {
-        if (this != &other) {
-            m_data = other.m_data;
-            copyRequestMessage(other);
-        }
-        return *this;
-    }
+    LocalIPCMessage &operator=(const LocalIPCMessage &other);
 
-    void copyRequestMessage(const LocalIPCMessage &other)
-    {
-        if (other.m_requestMessage) {
-            m_requestMessage = std::make_unique<LocalIPCMessage>(*other.m_requestMessage);
-        }
-    }
+    void copyRequestMessage(const LocalIPCMessage &other);
 
-    QString member() const
-    {
-        return m_data.m_member;
-    }
+    QString member() const;
 
-    LocalIPCMessage createReply() const
-    {
-        LocalIPCMessage reply;
-        reply.m_data.m_messageType = MessageType::Reply;
-        reply.m_requestMessage = std::make_unique<LocalIPCMessage>(*this);
-        return reply;
-    }
+    LocalIPCMessage createReply() const;
 
-    LocalIPCMessage createErrorReply()
-    {
-        auto reply = createReply();
-        reply.m_data.m_messageType = MessageType::Error;
-        return reply;
-    }
+    LocalIPCMessage createErrorReply();
 
     QString toString() const;
 
-    bool isReplyMessage() const
-    {
-        return (m_data.m_messageType == MessageType::Reply);
-    }
+    bool isReplyMessage() const;
 
-    bool isErrorMessage() const
-    {
-        return (m_data.m_messageType == MessageType::Error);
-    }
+    bool isErrorMessage() const;
 
     OutputPayLoad &outputPayLoad();
 
     InputPayLoad &inputPayLoad();
 
-    void addListener(const QObject *context, ReplyFunction function)
-    {
-        m_data.m_listener = function;
-        m_data.m_listenerContext = context;
-    }
+    void addListener(const QObject *context, ReplyFunction function);
 
-    void notifyListener()
-    {
-        if (m_requestMessage) {
-            if (m_requestMessage->m_data.m_listenerContext) {
-                m_requestMessage->m_data.m_listener(*this);
-            }
-        }
-    }
+    void notifyListener();
 
 private:
     struct
@@ -164,17 +112,6 @@ private:
     std::unique_ptr<OutputPayLoad> m_outputPayload;
     std::unique_ptr<InputPayLoad> m_inputPayload;
     std::unique_ptr<LocalIPCMessage> m_requestMessage;
-
-};
-
-
-class FaceliftIPCLocalLib_EXPORT LocalIPCRequestHandler
-{
-
-public:
-    virtual void deserializePropertyValues(LocalIPCMessage &msg, bool isCompleteSnapshot) = 0;
-    virtual void deserializeSignal(LocalIPCMessage &msg) = 0;
-    virtual void setServiceRegistered(bool isRegistered) = 0;
 
 };
 

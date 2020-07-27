@@ -64,10 +64,7 @@ public:
 
     static InterfaceBase *serviceMatches(const QString &objectPath, LocalIPCServiceAdapterBase *adapter);
 
-    Registry<QPointer<LocalIPCServiceAdapterBase>>& content()
-    {
-        return m_registry;
-    }
+    Registry<QPointer<LocalIPCServiceAdapterBase>>& content();
 
 private:
     Registry<QPointer<LocalIPCServiceAdapterBase>> m_registry;

@@ -57,47 +57,21 @@ public:
 
     ~NewIPCServiceAdapterBase();
 
-    bool enabled() const
-    {
-        return m_enabled;
-    }
+    bool enabled() const;
 
-    void setEnabled(bool enabled)
-    {
-        m_enabled = enabled;
-        onValueChanged();
-    }
+    void setEnabled(bool enabled);
 
-    void checkedSetService(QObject *service)
-    {
-        setService(service);
-        onValueChanged();
-    }
+    void checkedSetService(QObject *service);
 
-    const QString &objectPath() const
-    {
-        return m_objectPath;
-    }
+    const QString &objectPath() const;
 
-    void setObjectPath(const QString &objectPath)
-    {
-        m_objectPath = objectPath;
-        onValueChanged();
-    }
+    void setObjectPath(const QString &objectPath);
 
     virtual InterfaceBase *service() const = 0;
 
-    bool isReady() const
-    {
-        return (enabled() && m_providerReady && !objectPath().isEmpty() && (service() != nullptr));
-    }
+    bool isReady() const;
 
-    void onProviderCompleted()
-    {
-        // The parsing of the provider is finished => all our properties are set and we are ready to register our service
-        m_providerReady = true;
-        onValueChanged();
-    }
+    void onProviderCompleted();
 
     void registerService();
 
@@ -155,6 +129,5 @@ private:
     bool m_providerReady = false;
     bool m_registered = false;
 };
-
 
 }

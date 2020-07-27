@@ -210,5 +210,15 @@ void DBusIPCProxyBinder::bindToIPC()
 
 }
 
+const QString &DBusIPCProxyBinder::interfaceName() const
+{
+    return m_interfaceName;
+}
+
+bool DBusIPCProxyBinder::isServiceAvailable() const
+{
+    return m_serviceAvailable;
+}
+
 } // end namespace dbus
 } // end namespace facelift

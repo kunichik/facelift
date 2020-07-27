@@ -31,8 +31,9 @@
 #pragma once
 
 #include "LocalIPCMessage.h"
-#include "IPCServiceAdapterBase.h"
-#include "LocalIPCServiceAdapterBase.h"
+#include "IPCProxyBase.h"
+#include "LocalIPCRequestHandler.h"
+#include "LocalIPCProxyBinder.h"
 
 #if defined(FaceliftIPCLocalLib_LIBRARY)
 #  define FaceliftIPCLocalLib_EXPORT Q_DECL_EXPORT
@@ -44,55 +45,17 @@ namespace facelift {
 
 namespace local {
 
-using namespace facelift;
+//using namespace facelift;
 
-template<typename ServiceType>
-class LocalIPCServiceAdapter : public LocalIPCServiceAdapterBase
+class FaceliftIPCLocalLib_EXPORT LocalIPCProxyBase : protected LocalIPCRequestHandler
 {
-    using LocalIPCServiceAdapterBase::registerService;
-
 public:
-    typedef ServiceType TheServiceType;
-    using InputIPCMessage = ::facelift::local::LocalIPCMessage;
-    using OutputIPCMessage = ::facelift::local::LocalIPCMessage;
-
-    LocalIPCServiceAdapter(QObject *parent) : LocalIPCServiceAdapterBase(parent)
-    {
-        setInterfaceName(ServiceType::FULLY_QUALIFIED_INTERFACE_NAME);
-    }
-
-    ~LocalIPCServiceAdapter()
-    {
-        unregisterService();
-    }
-
-    void registerService(const QString &objectPath, ServiceType *service)
-    {
-        setObjectPath(objectPath);
-        m_service = service;
-        this->registerService();
-    }
-
-    void unregisterService() override
-    {
-        LocalIPCServiceAdapterBase::unregisterService();
-        setObjectPath("");
-        m_service = nullptr;
-    }
-
-    ServiceType *service() const override
-    {
-        return m_service;
-    }
-
-    void registerService(const QString &objectPath, InterfaceBase *serverObject) override
-    {
-        Q_ASSERT(qobject_cast<ServiceType *>(serverObject) != nullptr);
-        registerService(objectPath, static_cast<ServiceType *>(serverObject));  // TODO: get rid of that cast
-    }
+    LocalIPCProxyBase(LocalIPCProxyBinder &ipcBinder);
 
 protected:
-    QPointer<ServiceType> m_service;
+    LocalIPCProxyBinder &m_ipcBinder;
+    bool m_serviceRegistered = false;
+
 };
 
 }

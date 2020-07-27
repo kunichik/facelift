@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2019 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,19 +28,17 @@
 **
 **********************************************************************/
 
-#include "LocalIPC.h"
+#include "LocalIPCMessage.h"
 
 #include <QObject>
-#include <QDebug>
-#include <QTextStream>
 #include <QTimer>
 
-#include "FaceliftModel.h"
+//#include "FaceliftModel.h"
 #include "FaceliftUtils.h"
-#include "FaceliftProperty.h"
-
-#include "QMLAdapter.h"
-#include "QMLModel.h"
+//#include "FaceliftProperty.h"
+//
+//#include "QMLAdapter.h"
+//#include "QMLModel.h"
 
 #include "LocalIPCProxy.h"
 #include "LocalIPC-serialization.h"
@@ -49,7 +47,6 @@
 
 namespace facelift {
 namespace local {
-
 
 struct FaceliftIPCLocalLib_EXPORT FaceliftIPCCommon
 {
@@ -62,107 +59,10 @@ struct FaceliftIPCLocalLib_EXPORT FaceliftIPCCommon
 constexpr const char *FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME;
 
 
-void LocalIPCServiceAdapterBase::initOutgoingSignalMessage()
-{
-    m_pendingOutgoingMessage = std::make_unique<LocalIPCMessage>(FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME);
-
-    // Send property value updates before the signal itself so that they are set before the signal is triggered on the client side.
-    this->serializePropertyValues(*m_pendingOutgoingMessage, false);
-}
-
-void LocalIPCServiceAdapterBase::serializePropertyValues(LocalIPCMessage &msg, bool isCompleteSnapshot)
-{
-    Q_ASSERT(service());
-    serializeOptionalValue(msg, service()->ready(), m_previousReadyState, isCompleteSnapshot);
-}
-
-void LocalIPCServiceAdapterBase::flush()
-{
-    if (m_pendingOutgoingMessage) {
-        this->send(*m_pendingOutgoingMessage);
-        m_pendingOutgoingMessage.reset();
-    }
-}
-
-IPCHandlingResult LocalIPCServiceAdapterBase::handleMessage(LocalIPCMessage &requestMessage)
-{
-    LocalIPCMessage replyMessage = requestMessage.createReply();
-
-    qCDebug(LogIpc) << "Handling incoming message: " << requestMessage.toString();
-
-    auto handlingResult = IPCHandlingResult::OK;
-
-    bool sendReply = true;
-    if (requestMessage.member() == FaceliftIPCCommon::GET_PROPERTIES_MESSAGE_NAME) {
-        serializePropertyValues(replyMessage, true);
-    } else {
-        handlingResult = handleMethodCallMessage(requestMessage, replyMessage);
-        if (handlingResult == IPCHandlingResult::INVALID) {
-            replyMessage = requestMessage.createErrorReply();
-        } else if (handlingResult == IPCHandlingResult::OK_ASYNC) {
-            sendReply = false;
-        }
-    }
-
-    if (sendReply) {
-        replyMessage.notifyListener();
-    }
-
-    return handlingResult;
-}
-
-LocalIPCServiceAdapterBase::LocalIPCServiceAdapterBase(QObject *parent) : IPCServiceAdapterBase(parent)
-{
-}
-
-void LocalIPCServiceAdapterBase::sendAsyncCallAnswer(LocalIPCMessage &replyMessage)
-{
-    sendReply(replyMessage);
-}
-
-
-LocalIPCServiceAdapterBase::~LocalIPCServiceAdapterBase()
-{
-    emit destroyed(this); // TODO : get rid of this
-    unregisterService();
-}
-
-QString LocalIPCServiceAdapterBase::introspect(const QString &path) const
-{
-    Q_UNUSED(path);
-    return QString();
-}
-
-void LocalIPCServiceAdapterBase::unregisterService()
-{
-    if (m_alreadyInitialized) {
-        LocalIPCRegistry::instance().unregisterAdapter(this);
-        m_alreadyInitialized = false;
-    }
-}
-
-void LocalIPCServiceAdapterBase::registerService()
-{
-    if (!m_alreadyInitialized) {
-        LocalIPCRegistry::instance().registerAdapter(objectPath(), this);
-        m_alreadyInitialized = true;
-        qCDebug(LogIpc) << "Registering local IPC object at " << objectPath();
-        if (m_alreadyInitialized) {
-            QObject::connect(service(), &InterfaceBase::readyChanged, this, [this]() {
-                        this->sendSignal(CommonSignalID::readyChanged);
-                    });
-            connectSignals();
-        } else {
-            qFatal("Could not register service at object path '%s'", qPrintable(objectPath()));
-        }
-    }
-}
-
 LocalIPCProxyBinder::LocalIPCProxyBinder(InterfaceBase &owner, QObject *parent) :
     IPCProxyBinderBase(owner, parent)
 {
 }
-
 
 void LocalIPCProxyBinder::checkServiceAvailability()
 {
@@ -291,82 +191,25 @@ void LocalIPCProxyBinder::bindToIPC()
     checkServiceAvailability();
 }
 
-QString LocalIPCMessage::toString() const
+const QString &LocalIPCProxyBinder::serviceName() const
 {
-    QString str;
-    QTextStream s(&str);
-
-    s << "Local IPC message ";
-    s << " member:" << m_data.m_member;
-    s << m_data.m_payload;
-    return str;
+    return m_serviceName;
 }
 
-OutputPayLoad &LocalIPCMessage::outputPayLoad()
+const QString &LocalIPCProxyBinder::interfaceName() const
 {
-    if (m_outputPayload == nullptr) {
-        m_outputPayload = std::make_unique<OutputPayLoad>(m_data.m_payload);
-    }
-    return *m_outputPayload;
+    return m_interfaceName;
 }
 
-InputPayLoad &LocalIPCMessage::inputPayLoad()
+bool LocalIPCProxyBinder::isServiceAvailable() const
 {
-    if (m_inputPayload == nullptr) {
-        m_inputPayload = std::make_unique<InputPayLoad>(m_data.m_payload);
-    }
-    return *m_inputPayload;
+    return !m_serviceAdapter.isNull();
 }
 
-LocalIPCRegistry::LocalIPCRegistry() : m_registry(this)
+void LocalIPCProxyBinder::setHandler(LocalIPCRequestHandler *handler)
 {
-}
-
-void LocalIPCRegistry::registerAdapter(const QString &objectPath, LocalIPCServiceAdapterBase *adapter)
-{
-    Q_ASSERT(adapter);
-    if ((!m_registry.contains(objectPath)) || (m_registry[objectPath] == nullptr)) {
-        m_registry.insert(objectPath, adapter);
-        qCDebug(LogIpc) << "Local IPC service registered" << adapter << "under path" << objectPath;
-    } else {
-        qFatal("Can't register new object at path: '%s'. Previously registered object: %s", qPrintable(objectPath),
-                qPrintable(facelift::toString(m_registry[objectPath]->service())));
-    }
-}
-
-void LocalIPCRegistry::unregisterAdapter(LocalIPCServiceAdapterBase *adapter)
-{
-    for (auto &key : m_registry.keys()) {
-        if (m_registry[key] == adapter) {
-            m_registry.remove(key);
-            qCDebug(LogIpc) << "IPC service unregistered" << adapter;
-            break;
-        }
-    }
-}
-
-InterfaceBase *LocalIPCRegistry::serviceMatches(const QString &objectPath, LocalIPCServiceAdapterBase *adapter)
-{
-    if (adapter->objectPath() == objectPath) {
-        return adapter->service();
-    } else {
-        return nullptr;
-    }
-}
-
-LocalIPCServiceAdapterBase *LocalIPCRegistry::getAdapter(const QString &objectPath)
-{
-    if (m_registry.contains(objectPath)) {
-        return m_registry[objectPath];
-    } else {
-        return nullptr;
-    }
-}
-
-LocalIPCRegistry &LocalIPCRegistry::instance()
-{
-    static LocalIPCRegistry registry;
-    return registry;
+    m_serviceObject = handler;
+    checkInit();
 }
 
 }

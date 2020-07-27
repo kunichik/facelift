@@ -61,10 +61,7 @@ public:
 
     DBusIPCProxyBinder(InterfaceBase &owner, QObject *parent = nullptr);
 
-    const QString &interfaceName() const
-    {
-        return m_interfaceName;
-    }
+    const QString &interfaceName() const;
 
     void setObjectPath(const QString &objectPath) override;
 
@@ -80,10 +77,7 @@ public:
 
     void setServiceAvailable(bool isRegistered);
 
-    bool isServiceAvailable() const override
-    {
-        return m_serviceAvailable;
-    }
+    bool isServiceAvailable() const override;
 
     void requestPropertyValues();
 
