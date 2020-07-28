@@ -33,7 +33,7 @@
 
 #include "FaceliftModel.h"
 #include "QMLAdapter.h"
-#include "FaceliftProperty.h"
+#include "ModelProperty.h"
 
 #include "StructQObjectWrapper.h"
 

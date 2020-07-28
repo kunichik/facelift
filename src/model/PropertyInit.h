@@ -31,7 +31,7 @@
 #pragma once
 
 #include "FaceliftCommon.h"
-#include "FaceliftProperty.h"
+#include "ModelProperty.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT

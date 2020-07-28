@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "FaceliftProperty.h"
+#include "ModelProperty.h"
 #include "FaceliftConversion.h"
 #include "FaceliftQMLUtils.h"
 

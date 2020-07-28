@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -30,58 +30,85 @@
 
 #pragma once
 
-#include <memory>
-#include <functional>
-
+#include <QString>
 #include <QObject>
-#include <QDebug>
-#include <QMap>
-#include <qqml.h>
 
-#include "FaceliftCommon.h"
-#include "AsyncAnswer.h"
-#include "PropertyInterface.h"
-#include "ModelPropertyInterface.h"
-#include "ServicePropertyInterface.h"
-#include "InterfaceBase.h"
-
-#if defined(FaceliftModelLib_LIBRARY)
-#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
-#else
-#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
-#endif
-
+#include "TProperty.h"
+#include "ServiceProperty.h"
+#include "ListProperty.h"
 
 namespace facelift {
 
-template<typename ElementType>
-using Map = QMap<QString, ElementType>;
-
-
-template<typename InterfaceType, typename PropertyType>
-using PropertyGetter = const PropertyType &(*)();
-
-template<typename QMLType>
-void qmlRegisterType(const char *uri, const char *typeName)
+template<typename Type, typename Enable = void>
+class Property : public TProperty<Type>
 {
-    ::qmlRegisterType<QMLType>(uri, 1, 0, typeName);
-}
+public:
+    using TProperty<Type>::operator=;
 
-template<typename QMLType>
-void qmlRegisterType(const char *uri)
-{
-    ::qmlRegisterType<QMLType>(uri, QMLType::INTERFACE_NAME);
-}
-
-}
-
-template<typename ElementType>
-inline QTextStream &operator<<(QTextStream &outStream, const facelift::Map<ElementType> &f)
-{
-    outStream << "[";
-    for (const auto &e : f.toStdMap()) {
-        outStream << e.first << "=" << e.second << ", ";
+    Property(Type initialValue) : TProperty<Type>(initialValue)
+    {
     }
-    outStream << "]";
-    return outStream;
+
+    Property()
+    {
+    }
+
+};
+
+
+template<typename Type>
+class Property<Type *, typename std::enable_if<std::is_base_of<QObject *, Type>::value>::type> : public ServiceProperty<Type>
+{
+public:
+    using ServiceProperty<Type>::operator=;
+
+    Property()
+    {
+    }
+
+};
+
+
+template<typename ElementType>
+class Property<QList<ElementType> > : public ListProperty<ElementType>
+{
+public:
+    using TProperty<QList<ElementType> >::operator=;
+
+};
+
+template<typename ElementType>
+class Property<QMap<QString, ElementType> > : public TProperty<QMap<QString, ElementType> >
+{
+
+public:
+    using TProperty<QMap<QString, ElementType> >::operator=;
+
+    void removeAt(int i)
+    {
+        this->modifiableValue().removeAt(i);
+        this->triggerValueChangedSignal();
+    }
+
+    void addElement(ElementType element)
+    {
+        this->modifiableValue().append(element);
+        this->triggerValueChangedSignal();
+    }
+
+    int size() const
+    {
+        return this->value().size();
+    }
+
+private:
+    QMap<QString, ElementType> &modifiableValue()
+    {
+        this->breakBinding();
+        return this->m_value;
+    }
+
+};
+
+
 }

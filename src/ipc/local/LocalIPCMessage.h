@@ -42,7 +42,7 @@
 
 #include "FaceliftModel.h"
 #include "FaceliftUtils.h"
-#include "FaceliftProperty.h"
+#include "ModelProperty.h"
 
 #include "ipc-common.h"
 

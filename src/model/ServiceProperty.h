@@ -30,38 +30,62 @@
 
 #pragma once
 
-#if defined(FaceliftIPCCommonLib_LIBRARY)
-#  define FaceliftIPCCommonLib_EXPORT Q_DECL_EXPORT
-#else
-#  define FaceliftIPCCommonLib_EXPORT Q_DECL_IMPORT
-#endif
-
-//#include "ipc-common.h"
-//#include "FaceliftUtils.h"
-//#include "ModelProperty.h"
-#include "OutputPayLoad.h"
-#include "InputPayLoad.h"
+#include "TProperty.h"
 
 namespace facelift {
 
-template<typename Type, typename Enable = void>
-struct IPCTypeHandler
+/**
+ * Specialization used to store a reference to an interface.
+ */
+template<typename Type>
+class ServiceProperty : public TProperty<Type *>
 {
-    static void writeDBUSSignature(QTextStream &s)
+
+public:
+    template<typename Class, typename PropertyType>
+    ServiceProperty &bind(const ServicePropertyInterface<Class, PropertyType> &property)
     {
-        s << "i";
+        this->bind([property] () {
+                return property.value();
+            }).addTrigger(property.object(), property.signal());
+        return *this;
     }
 
-    static void write(OutputPayLoad &msg, const Type &v)
+    Type *operator=(Type *right)
     {
-        msg.writeSimple(v);
+        ServiceProperty::setValue(right);
+        return this->m_value;
     }
 
-    static void read(InputPayLoad &msg, Type &v)
+    void setValue(Type *newValue)
     {
-        msg.readNextParameter(v);
+        if (newValue != m_pointer) {
+            m_valueChanged = true;
+            // Store as a QPointer in order to be able to detect object destructions and generate a change signal even if the same
+            // pointer is assigned later on
+            m_pointer = newValue;
+        }
+
+        TProperty<Type *>::setValue(newValue);
     }
 
+    bool isDirty() const override
+    {
+        return ((this->m_previousValue != this->value()) || m_valueChanged);
+    }
+
+    void clean() override
+    {
+        TProperty<Type *>::clean();
+        m_valueChanged = false;
+    }
+
+    using TProperty<Type *>::bind;
+
+private:
+    bool m_valueChanged = false;
+
+    QPointer<Type> m_pointer;
 };
 
 }

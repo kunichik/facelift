@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2019 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -30,58 +30,49 @@
 
 #pragma once
 
-#include <memory>
-#include <functional>
-
-#include <QObject>
-#include <QDebug>
-#include <QMap>
-#include <qqml.h>
+#include <QJSValue>
 
 #include "FaceliftCommon.h"
-#include "AsyncAnswer.h"
-#include "PropertyInterface.h"
-#include "ModelPropertyInterface.h"
-#include "ServicePropertyInterface.h"
-#include "InterfaceBase.h"
-
-#if defined(FaceliftModelLib_LIBRARY)
-#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
-#else
-#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
-#endif
-
+#include "FaceliftConversion.h"
 
 namespace facelift {
 
-template<typename ElementType>
-using Map = QMap<QString, ElementType>;
-
-
-template<typename InterfaceType, typename PropertyType>
-using PropertyGetter = const PropertyType &(*)();
-
-template<typename QMLType>
-void qmlRegisterType(const char *uri, const char *typeName)
+template<typename Type>
+inline const typename TypeHandler<Type>::QMLType toQMLCompatibleType(const Type &v)
 {
-    ::qmlRegisterType<QMLType>(uri, 1, 0, typeName);
+    return TypeHandler<Type>::toQMLCompatibleType(v);
 }
 
-template<typename QMLType>
-void qmlRegisterType(const char *uri)
-{
-    ::qmlRegisterType<QMLType>(uri, QMLType::INTERFACE_NAME);
-}
 
-}
-
-template<typename ElementType>
-inline QTextStream &operator<<(QTextStream &outStream, const facelift::Map<ElementType> &f)
+template<typename Type, typename Sfinae = void>
+struct QMLModelTypeHandler
 {
-    outStream << "[";
-    for (const auto &e : f.toStdMap()) {
-        outStream << e.first << "=" << e.second << ", ";
+    static QJSValue toJSValue(const Type &v, QQmlEngine *engine)
+    {
+        return engine->toScriptValue(facelift::toQMLCompatibleType(v));
     }
-    outStream << "]";
-    return outStream;
+
+    static void fromJSValue(Type &v, const QJSValue &value, QQmlEngine *engine)
+    {
+        v = engine->fromScriptValue<Type>(value);
+    }
+};
+
+template<typename Type>
+struct QMLModelTypeHandler<Type, typename std::enable_if<std::is_enum<Type>::value>::type>
+{
+    static QJSValue toJSValue(const Type &v, QQmlEngine *engine)
+    {
+        Q_UNUSED(engine)
+        return QJSValue(v);
+    }
+
+    static void fromJSValue(Type &v, const QJSValue &value, QQmlEngine *engine)
+    {
+        Q_UNUSED(engine)
+        v = static_cast<Type>(value.toInt());
+    }
+};
+
+
 }

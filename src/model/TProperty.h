@@ -34,11 +34,6 @@
 #include <QObject>
 #include <functional>
 
-// #include "FaceliftCommon.h"
-// #include "FaceliftModel.h"
-// 
-// #include "FaceliftStringConversion.h"
-
 namespace facelift {
 
 /**

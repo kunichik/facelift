@@ -25,7 +25,7 @@ facelift_add_library(FaceliftModelLib
         ServiceRegistry.h
         StructQObjectWrapper.h
         QMLModel.h
-        FaceliftProperty.h
+        ModelProperty.h
         FaceliftStringConversion.h
         FaceliftConversion.h
         FaceliftCommon.h
@@ -43,6 +43,11 @@ facelift_add_library(FaceliftModelLib
         InterfaceBase.h
         PropertyBase.h
         TProperty.h
+        Property.h
+        ServiceProperty.h
+        ListProperty.h
+        PropertyConnector.h
+        QMLModelTypeHandler.h
     LINK_LIBRARIES
         Qt5::Qml
         Qt5::Quick

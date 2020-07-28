@@ -30,58 +30,48 @@
 
 #pragma once
 
-#include <memory>
-#include <functional>
-
-#include <QObject>
-#include <QDebug>
-#include <QMap>
-#include <qqml.h>
+#include <QList>
 
 #include "FaceliftCommon.h"
-#include "AsyncAnswer.h"
-#include "PropertyInterface.h"
-#include "ModelPropertyInterface.h"
-#include "ServicePropertyInterface.h"
-#include "InterfaceBase.h"
+#include "FaceliftModel.h"
 
-#if defined(FaceliftModelLib_LIBRARY)
-#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
-#else
-#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
-#endif
+#include "FaceliftStringConversion.h"
 
+#include "TProperty.h"
 
 namespace facelift {
 
 template<typename ElementType>
-using Map = QMap<QString, ElementType>;
-
-
-template<typename InterfaceType, typename PropertyType>
-using PropertyGetter = const PropertyType &(*)();
-
-template<typename QMLType>
-void qmlRegisterType(const char *uri, const char *typeName)
+class ListProperty : public TProperty<QList<ElementType> >
 {
-    ::qmlRegisterType<QMLType>(uri, 1, 0, typeName);
-}
 
-template<typename QMLType>
-void qmlRegisterType(const char *uri)
-{
-    ::qmlRegisterType<QMLType>(uri, QMLType::INTERFACE_NAME);
-}
+public:
+    using TProperty<QList<ElementType> >::operator=;
 
-}
-
-template<typename ElementType>
-inline QTextStream &operator<<(QTextStream &outStream, const facelift::Map<ElementType> &f)
-{
-    outStream << "[";
-    for (const auto &e : f.toStdMap()) {
-        outStream << e.first << "=" << e.second << ", ";
+    void removeAt(int i)
+    {
+        this->modifiableValue().removeAt(i);
+        this->triggerValueChangedSignal();
     }
-    outStream << "]";
-    return outStream;
+
+    void addElement(ElementType element)
+    {
+        this->modifiableValue().append(element);
+        this->triggerValueChangedSignal();
+    }
+
+    int size() const
+    {
+        return this->value().size();
+    }
+
+private:
+    QList<ElementType> &modifiableValue()
+    {
+        this->breakBinding();
+        return this->m_value;
+    }
+
+};
+
 }
