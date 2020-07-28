@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,37 +28,43 @@
 **
 **********************************************************************/
 
-#include "FaceliftModel.h"
-#include "ServiceRegistry.h"
+#pragma once
 
-#include <QTimer>
+#include "Model.h"
+
+#if defined(FaceliftModelLib_LIBRARY)
+#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
+#else
+#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
+#endif
+
 
 namespace facelift {
 
-ServiceRegistry::~ServiceRegistry()
+template<typename Class, typename PropertyType>
+class ModelPropertyInterface
 {
-}
+public:
+    ModelPropertyInterface(Class *object, facelift::Model<PropertyType> &property)
+    {
+        m_object = object;
+        m_property = &property;
+    }
 
-void ServiceRegistry::registerObject(InterfaceBase *i)
-{
-    m_objects.append(i);
-    emit objectRegistered(i);
-}
+    facelift::Model<PropertyType> *property() const
+    {
+        return m_property;
+    }
 
-ServiceRegistry &ServiceRegistry::instance()
-{
-    static ServiceRegistry reg;
-    return reg;
-}
+    Class *object() const
+    {
+        return m_object;
+    }
 
-void InterfaceBase::init(const QString &interfaceName)
-{
-    m_interfaceName = interfaceName;
-}
+private:
+    Class *m_object = nullptr;
+    facelift::Model<PropertyType> *m_property = nullptr;
+};
 
-void registerInterfaceImplementationInstance(InterfaceBase & i)
-{
-    facelift::ServiceRegistry::instance().registerObject(&i);
-}
 
 }

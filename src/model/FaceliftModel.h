@@ -41,6 +41,7 @@
 #include "FaceliftCommon.h"
 #include "AsyncAnswer.h"
 #include "PropertyInterface.h"
+#include "ModelPropertyInterface.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -134,131 +135,6 @@ void qmlRegisterType(const char *uri)
 {
     ::qmlRegisterType<QMLType>(uri, QMLType::INTERFACE_NAME);
 }
-
-
-class FaceliftModelLib_EXPORT ModelBase : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    ModelBase();
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged
-     */
-    Q_SIGNAL void dataChanged(int first, int last);
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged
-     */
-    void dataChanged(int index)
-    {
-        dataChanged(index, index);
-    }
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows
-     */
-    Q_SIGNAL void beginInsertElements(int first, int last);
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows
-     */
-    Q_SIGNAL void beginRemoveElements(int first, int last);
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#beginMoveRows
-     */
-    Q_SIGNAL void beginMoveElements(int sourceFirst, int sourceLast, int destinationRow);
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#endMoveRows
-     */
-    Q_SIGNAL void endMoveElements();
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows
-     */
-    Q_SIGNAL void endInsertElements();
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows
-     */
-    Q_SIGNAL void endRemoveElements();
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel
-     */
-    Q_SIGNAL void beginResetModel();
-
-    /**
-     * See https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel
-     */
-    Q_SIGNAL void endResetModel();
-
-    Q_SIGNAL void elementCountChanged();
-
-    int size() const
-    {
-        return m_size;
-    }
-
-    void bindOtherModel(facelift::ModelBase *otherModel);
-
-protected:
-    void setSize(int size)
-    {
-        m_size = size;
-    }
-
-private:
-    void onModelChanged();
-    void applyNewSize();
-
-    int m_size = 0;
-    int m_previousElementCount = 0;
-    int m_pendingSize = -1;
-
-protected:
-    bool m_resettingModel = false;
-
-};
-
-
-template<typename ElementType>
-class Model : public ModelBase
-{
-public:
-    virtual ElementType elementAt(int index) const = 0;
-
-};
-
-
-template<typename Class, typename PropertyType>
-class ModelPropertyInterface
-{
-public:
-    ModelPropertyInterface(Class *object, facelift::Model<PropertyType> &property)
-    {
-        m_object = object;
-        m_property = &property;
-    }
-
-    facelift::Model<PropertyType> *property() const
-    {
-        return m_property;
-    }
-
-    Class *object() const
-    {
-        return m_object;
-    }
-
-private:
-    Class *m_object = nullptr;
-    facelift::Model<PropertyType> *m_property = nullptr;
-};
 
 
 template<typename Class, typename ServiceType>
