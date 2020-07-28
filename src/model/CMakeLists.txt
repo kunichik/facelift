@@ -8,11 +8,11 @@ facelift_add_library(FaceliftModelLib
         ModuleBase.cpp
         QMLModel.cpp
         FaceliftProperty.cpp
-        FaceliftImplementationBase.cpp
         FaceliftEnum.cpp
         FaceliftStringConversion.cpp
         PropertyVerifier.cpp
         TAsyncAnswerMasterBase.cpp
+        PropertyInit.cpp
     HEADERS
         FaceliftModel.h
         QMLAdapter.h
@@ -27,12 +27,12 @@ facelift_add_library(FaceliftModelLib
         FaceliftConversion.h
         FaceliftCommon.h
         FaceliftEnum.h
-        FaceliftImplementationBase.h
         FaceliftQMLUtils.h
         AsyncAnswer.h
         PropertyVerifier.h
         TAsyncAnswerMasterBase.h
         TAsyncAnswerMaster.h
+        PropertyInit.h
     LINK_LIBRARIES
         Qt5::Qml
         Qt5::Quick

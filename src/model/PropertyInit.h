@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,15 +28,30 @@
 **
 **********************************************************************/
 
-#include "FaceliftImplementationBase.h"
+#pragma once
+
+#include "FaceliftCommon.h"
+#include "FaceliftProperty.h"
+
+#if defined(FaceliftModelLib_LIBRARY)
+#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
+#else
+#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
+#endif
+
 
 namespace facelift {
 
-void PropertyInit::initProperties(QObject* receiver, const std::initializer_list<PropertyInit>& initArray)
-{
-    for (auto& o : initArray) {
-        o.prop.init(receiver, o.signal, o.name);
-    }
-}
+struct FaceliftModelLib_EXPORT PropertyInit {
+
+    using ChangeSignal = void (QObject::*)();
+
+    facelift::PropertyBase &prop;
+    ChangeSignal signal;
+    const char* name;
+
+    static void initProperties(QObject* receiver, const std::initializer_list<PropertyInit>& initArray);
+
+};
 
 }

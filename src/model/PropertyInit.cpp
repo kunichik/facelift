@@ -28,30 +28,15 @@
 **
 **********************************************************************/
 
-#pragma once
-
-#include "FaceliftCommon.h"
-#include "FaceliftProperty.h"
-
-#if defined(FaceliftModelLib_LIBRARY)
-#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
-#else
-#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
-#endif
-
+#include "PropertyInit.h"
 
 namespace facelift {
 
-struct FaceliftModelLib_EXPORT PropertyInit {
-
-    using ChangeSignal = void (QObject::*)();
-
-    facelift::PropertyBase &prop;
-    ChangeSignal signal;
-    const char* name;
-
-    static void initProperties(QObject* receiver, const std::initializer_list<PropertyInit>& initArray);
-
-};
+void PropertyInit::initProperties(QObject* receiver, const std::initializer_list<PropertyInit>& initArray)
+{
+    for (auto& o : initArray) {
+        o.prop.init(receiver, o.signal, o.name);
+    }
+}
 
 }
