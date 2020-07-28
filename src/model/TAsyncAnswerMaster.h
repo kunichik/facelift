@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,22 +28,53 @@
 **
 **********************************************************************/
 
-#include "AsyncAnswer.h"
+#pragma once
+
+//#include <memory>
+//#include <functional>
+
+#include <QObject>
+
+#include "TAsyncAnswerMasterBase.h"
+//#include <QDebug>
+//#include <QPointer>
+//
+//#include "FaceliftCommon.h"
+
+#if defined(FaceliftModelLib_LIBRARY)
+#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
+#else
+#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
+#endif
+
 
 namespace facelift {
 
-TAsyncAnswerMasterBase::~TAsyncAnswerMasterBase()
+template<typename CallBack>
+class TAsyncAnswerMaster : private TAsyncAnswerMasterBase
 {
-    if (!m_isAlreadyAnswered) {
-        // TODO : turn the following into faceliftSeriousError since this should never happen
-        qCritical() << "No answer provided to asynchronous call. An answer must be provided to the caller of an async method ! Context :" << m_context.data();
+
+public:
+    TAsyncAnswerMaster(QObject* context, CallBack callback) : TAsyncAnswerMasterBase(context), m_callback(callback)
+    {
     }
+
+    template<typename ... Types>
+    void call(const Types & ... args)
+    {
+        setAnswered();
+        if (m_context) {
+            m_callback(args ...);
+        }
+        else {
+            qCritical() << "Callback context destroyed";
+        }
+    }
+
+protected:
+    CallBack m_callback;
+};
+
+
 }
 
-void TAsyncAnswerMasterBase::onNoCallbackCalled()
-{
-    qDebug() << "Async answer triggered without callback";
-}
-
-
-}

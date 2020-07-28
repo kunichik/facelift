@@ -34,10 +34,10 @@
 #include <functional>
 
 #include <QObject>
-#include <QDebug>
 #include <QPointer>
 
 #include "FaceliftCommon.h"
+#include "TAsyncAnswerMaster.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -47,57 +47,6 @@
 
 
 namespace facelift {
-
-class TAsyncAnswerMasterBase {
-
-public:
-
-    TAsyncAnswerMasterBase(QObject* context)
-    {
-        m_context = context;
-    }
-
-    ~TAsyncAnswerMasterBase();
-
-    static void onNoCallbackCalled();
-
-protected:
-
-    void setAnswered()
-    {
-        Q_ASSERT(m_isAlreadyAnswered == false);
-        m_isAlreadyAnswered = true;
-    }
-
-    bool m_isAlreadyAnswered = false;
-    QPointer<QObject> m_context;
-
-};
-
-template<typename CallBack>
-class TAsyncAnswerMaster : private TAsyncAnswerMasterBase
-{
-
-public:
-    TAsyncAnswerMaster(QObject* context, CallBack callback) : TAsyncAnswerMasterBase(context), m_callback(callback)
-    {
-    }
-
-    template<typename ... Types>
-    void call(const Types & ... args)
-    {
-        setAnswered();
-        if (m_context) {
-            m_callback(args ...);
-        }
-        else {
-            qCritical() << "Callback context destroyed";
-        }
-    }
-
-protected:
-    CallBack m_callback;
-};
 
 
 template<typename ReturnType>

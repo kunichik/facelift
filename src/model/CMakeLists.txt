@@ -11,8 +11,8 @@ facelift_add_library(FaceliftModelLib
         FaceliftImplementationBase.cpp
         FaceliftEnum.cpp
         FaceliftStringConversion.cpp
-        AsyncAnswer.cpp
         PropertyVerifier.cpp
+        TAsyncAnswerMasterBase.cpp
     HEADERS
         FaceliftModel.h
         QMLAdapter.h
@@ -31,6 +31,8 @@ facelift_add_library(FaceliftModelLib
         FaceliftQMLUtils.h
         AsyncAnswer.h
         PropertyVerifier.h
+        TAsyncAnswerMasterBase.h
+        TAsyncAnswerMaster.h
     LINK_LIBRARIES
         Qt5::Qml
         Qt5::Quick
