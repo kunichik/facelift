@@ -40,6 +40,7 @@
 
 #include "FaceliftCommon.h"
 #include "AsyncAnswer.h"
+#include "PropertyInterface.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -133,56 +134,6 @@ void qmlRegisterType(const char *uri)
 {
     ::qmlRegisterType<QMLType>(uri, QMLType::INTERFACE_NAME);
 }
-
-
-template<typename Class, typename PropertyType>
-class PropertyInterface
-{
-
-public:
-    typedef void (Class::*ChangeSignal)();
-    typedef const PropertyType &(Class::*GetterMethod)() const;
-
-    PropertyInterface(Class *object, GetterMethod getter, ChangeSignal signal, const char* name)
-    {
-        m_object = object;
-        m_signal = signal;
-        m_getter = getter;
-        m_name = name;
-    }
-
-    const PropertyType &value() const
-    {
-        const auto &v = (m_object->*m_getter)();
-        return v;
-    }
-
-    ChangeSignal signal() const
-    {
-        return m_signal;
-    }
-
-    GetterMethod getter() const
-    {
-        return m_getter;
-    }
-
-    Class *object() const
-    {
-        return m_object;
-    }
-
-    const char *name() const
-    {
-        return m_name;
-    }
-
-private:
-    Class *m_object = nullptr;
-    ChangeSignal m_signal;
-    GetterMethod m_getter;
-    const char* m_name = nullptr;
-};
 
 
 class FaceliftModelLib_EXPORT ModelBase : public QObject
