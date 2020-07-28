@@ -42,6 +42,7 @@
 #include "AsyncAnswer.h"
 #include "PropertyInterface.h"
 #include "ModelPropertyInterface.h"
+#include "ServicePropertyInterface.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -135,47 +136,6 @@ void qmlRegisterType(const char *uri)
 {
     ::qmlRegisterType<QMLType>(uri, QMLType::INTERFACE_NAME);
 }
-
-
-template<typename Class, typename ServiceType>
-class ServicePropertyInterface
-{
-public:
-    typedef void (Class::*ChangeSignal)();
-    typedef ServiceType * (Class::*GetterMethod)();
-
-    ServicePropertyInterface(Class *object, GetterMethod getter, ChangeSignal signal)
-    {
-        m_object = object;
-        m_signal = signal;
-        m_getter = getter;
-    }
-
-    ServiceType *value() const
-    {
-        return (m_object->*m_getter)();
-    }
-
-    ChangeSignal signal() const
-    {
-        return m_signal;
-    }
-
-    Class *object() const
-    {
-        return m_object;
-    }
-
-    GetterMethod getter() const
-    {
-        return m_getter;
-    }
-
-private:
-    Class *m_object = nullptr;
-    ChangeSignal m_signal;
-    GetterMethod m_getter;
-};
 
 
 FaceliftModelLib_EXPORT void registerInterfaceImplementationInstance(InterfaceBase & i);

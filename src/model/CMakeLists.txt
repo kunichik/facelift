@@ -38,6 +38,7 @@ facelift_add_library(FaceliftModelLib
         ModelBase.h
         Model.h
         ModelPropertyInterface.h
+        ServicePropertyInterface.h
     LINK_LIBRARIES
         Qt5::Qml
         Qt5::Quick
