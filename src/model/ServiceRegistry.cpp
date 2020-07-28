@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,39 +28,29 @@
 **
 **********************************************************************/
 
-#pragma once
-
-#include "FaceliftModel.h"
-
-#if defined(FaceliftModelLib_LIBRARY)
-#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
-#else
-#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
-#endif
+#include "ServiceRegistry.h"
 
 namespace facelift {
 
-class InterfaceBase;
-
-class FaceliftModelLib_EXPORT ServiceRegistry : public QObject
+ServiceRegistry::~ServiceRegistry()
 {
-    Q_OBJECT
+}
 
-public:
-    static ServiceRegistry &instance();
+void ServiceRegistry::registerObject(InterfaceBase *i)
+{
+    m_objects.append(i);
+    emit objectRegistered(i);
+}
 
-    virtual ~ServiceRegistry();
+ServiceRegistry &ServiceRegistry::instance()
+{
+    static ServiceRegistry reg;
+    return reg;
+}
 
-    void registerObject(InterfaceBase *i);
-
-    const QList<InterfaceBase *> objects() const;
-
-    Q_SIGNAL void objectRegistered(InterfaceBase *object);
-    Q_SIGNAL void objectDeregistered(InterfaceBase *object);
-
-private:
-    QList<InterfaceBase *> m_objects;
-
-};
+const QList<InterfaceBase *> ServiceRegistry::objects() const
+{
+    return m_objects;
+}
 
 }

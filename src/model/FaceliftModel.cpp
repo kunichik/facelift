@@ -35,22 +35,6 @@
 
 namespace facelift {
 
-ServiceRegistry::~ServiceRegistry()
-{
-}
-
-void ServiceRegistry::registerObject(InterfaceBase *i)
-{
-    m_objects.append(i);
-    emit objectRegistered(i);
-}
-
-ServiceRegistry &ServiceRegistry::instance()
-{
-    static ServiceRegistry reg;
-    return reg;
-}
-
 void InterfaceBase::init(const QString &interfaceName)
 {
     m_interfaceName = interfaceName;

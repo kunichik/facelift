@@ -14,6 +14,7 @@ facelift_add_library(FaceliftModelLib
         TAsyncAnswerMasterBase.cpp
         PropertyInit.cpp
         ModelBase.cpp
+        ServiceRegistry.cpp
     HEADERS
         FaceliftModel.h
         QMLAdapter.h
