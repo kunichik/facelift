@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,18 +28,13 @@
 **
 **********************************************************************/
 
-#include "FaceliftProperty.h"
+#include "PropertyBase.h"
 #include <QTimer>
 
 namespace facelift {
 
-PropertyBase::PropertyBase()
-{
-}
-
-PropertyBase::~PropertyBase()
-{
-}
+PropertyBase::PropertyBase() = default;
+PropertyBase::~PropertyBase() = default;
 
 void PropertyBase::doBreakBinding()
 {
@@ -50,7 +45,6 @@ void PropertyBase::doBreakBinding()
     }
     m_connections.clear();
 }
-
 
 void PropertyBase::triggerValueChangedSignal()
 {
@@ -81,6 +75,34 @@ void PropertyBase::doTriggerChangeSignal()
             clean();
             (m_ownerObject->*signalPointer())();
         }
+    }
+}
+
+QObject *PropertyBase::owner() const
+{
+    return m_ownerObject;
+}
+
+const char *PropertyBase::name() const
+{
+    return m_name;
+}
+
+PropertyBase::ChangeSignal PropertyBase::signalPointer() const
+{
+    return m_ownerSignal;
+}
+
+bool &PropertyBase::isReady()
+{
+    return m_ready;
+}
+
+void PropertyBase::setReady(bool ready)
+{
+    if (Q_UNLIKELY(m_readySignal && m_ready != ready)) {
+        m_ready = ready;
+        (m_ownerObject->*m_readySignal)();
     }
 }
 
