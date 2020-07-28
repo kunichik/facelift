@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,21 +28,54 @@
 **
 **********************************************************************/
 
-#include "FaceliftModel.h"
-#include "ServiceRegistry.h"
-
-#include <QTimer>
+#include "InterfaceBase.h"
 
 namespace facelift {
 
-// void InterfaceBase::init(const QString &interfaceName)
-// {
-//     m_interfaceName = interfaceName;
-// }
+InterfaceBase::InterfaceBase(QObject *parent) :
+    QObject(parent)
+{
+}
 
-// void registerInterfaceImplementationInstance(InterfaceBase & i)
-// {
-//     facelift::ServiceRegistry::instance().registerObject(&i);
-// }
+void InterfaceBase::setImplementationID(const QString &id)
+{
+    m_implementationID = id;
+}
+
+const QString &InterfaceBase::implementationID() const
+{
+    return m_implementationID;
+}
+
+QObject *InterfaceBase::impl()
+{
+    return this;
+}
+
+const QString &InterfaceBase::interfaceID() const
+{
+    return m_interfaceName;
+}
+
+void InterfaceBase::setComponentCompleted() {
+    if (!m_componentCompleted) {
+        m_componentCompleted = true;
+        emit componentCompleted();
+    }
+}
+
+bool InterfaceBase::isComponentCompleted() const {
+    return m_componentCompleted;
+}
+
+void InterfaceBase::init(const QString &interfaceName)
+{
+    m_interfaceName = interfaceName;
+}
+
+void registerInterfaceImplementationInstance(InterfaceBase & i)
+{
+    facelift::ServiceRegistry::instance().registerObject(&i);
+}
 
 }

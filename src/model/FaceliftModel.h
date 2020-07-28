@@ -43,6 +43,7 @@
 #include "PropertyInterface.h"
 #include "ModelPropertyInterface.h"
 #include "ServicePropertyInterface.h"
+#include "InterfaceBase.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -63,67 +64,67 @@ using PropertyGetter = const PropertyType &(*)();
 /**
  * Base interface which every interface inherits from
  */
-class FaceliftModelLib_EXPORT InterfaceBase : public QObject
-{
-    Q_OBJECT
+// class FaceliftModelLib_EXPORT InterfaceBase : public QObject
+// {
+//     Q_OBJECT
 
-public:
-    typedef void QMLAdapterType;
+// public:
+//     typedef void QMLAdapterType;
 
-    InterfaceBase(QObject *parent = nullptr) :
-        QObject(parent)
-    {
-    }
+//     InterfaceBase(QObject *parent = nullptr) :
+//         QObject(parent)
+//     {
+//     }
 
-    void setImplementationID(const QString &id)
-    {
-        m_implementationID = id;
-    }
+//     void setImplementationID(const QString &id)
+//     {
+//         m_implementationID = id;
+//     }
 
-    const QString &implementationID() const
-    {
-        return m_implementationID;
-    }
+//     const QString &implementationID() const
+//     {
+//         return m_implementationID;
+//     }
 
-    virtual bool ready() const = 0;
+//     virtual bool ready() const = 0;
 
-    Q_SIGNAL void readyChanged();
+//     Q_SIGNAL void readyChanged();
 
-    QObject *impl()
-    {
-        return this;
-    }
+//     QObject *impl()
+//     {
+//         return this;
+//     }
 
-    void init(const QString &interfaceName);
+//     void init(const QString &interfaceName);
 
-    const QString &interfaceID() const
-    {
-        return m_interfaceName;
-    }
+//     const QString &interfaceID() const
+//     {
+//         return m_interfaceName;
+//     }
 
-    void setComponentCompleted() {
-        if (!m_componentCompleted) {
-            m_componentCompleted = true;
-            emit componentCompleted();
-        }
-    }
+//     void setComponentCompleted() {
+//         if (!m_componentCompleted) {
+//             m_componentCompleted = true;
+//             emit componentCompleted();
+//         }
+//     }
 
-    bool isComponentCompleted() const {
-        return m_componentCompleted;
-    }
+//     bool isComponentCompleted() const {
+//         return m_componentCompleted;
+//     }
 
-    Q_SIGNAL void componentCompleted();
+//     Q_SIGNAL void componentCompleted();
 
-protected:
-    friend class ModelQMLImplementationBase;
+// protected:
+//     friend class ModelQMLImplementationBase;
 
-private:
-    QString m_implementationID = "Undefined";
-    QString m_interfaceName;
+// private:
+//     QString m_implementationID = "Undefined";
+//     QString m_interfaceName;
 
-    bool m_componentCompleted = false;
+//     bool m_componentCompleted = false;
 
-};
+// };
 
 template<typename QMLType>
 void qmlRegisterType(const char *uri, const char *typeName)
@@ -138,7 +139,7 @@ void qmlRegisterType(const char *uri)
 }
 
 
-FaceliftModelLib_EXPORT void registerInterfaceImplementationInstance(InterfaceBase & i);
+// FaceliftModelLib_EXPORT void registerInterfaceImplementationInstance(facelift::InterfaceBase & i);
 
 }
 
@@ -154,4 +155,4 @@ inline QTextStream &operator<<(QTextStream &outStream, const facelift::Map<Eleme
 }
 
 
-Q_DECLARE_METATYPE(facelift::InterfaceBase *)
+// Q_DECLARE_METATYPE(facelift::InterfaceBase *)

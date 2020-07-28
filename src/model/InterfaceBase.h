@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,21 +28,78 @@
 **
 **********************************************************************/
 
-#include "FaceliftModel.h"
+#pragma once
+
+//#include <memory>
+//#include <functional>
+
+#include <QObject>
+#include <QMap>
+//include <qqml.h>
+//
+//include "FaceliftCommon.h"
+//include "AsyncAnswer.h"
 #include "ServiceRegistry.h"
 
-#include <QTimer>
+#if defined(FaceliftModelLib_LIBRARY)
+#  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
+#else
+#  define FaceliftModelLib_EXPORT Q_DECL_IMPORT
+#endif
+
 
 namespace facelift {
 
-// void InterfaceBase::init(const QString &interfaceName)
-// {
-//     m_interfaceName = interfaceName;
-// }
+/**
+ * Base interface which every interface inherits from
+ */
+class FaceliftModelLib_EXPORT InterfaceBase : public QObject
+{
+    Q_OBJECT
+
+public:
+    typedef void QMLAdapterType;
+
+    InterfaceBase(QObject *parent = nullptr);
+
+    void setImplementationID(const QString &id);
+
+    const QString &implementationID() const;
+
+    virtual bool ready() const = 0;
+
+    Q_SIGNAL void readyChanged();
+
+    QObject *impl();
+
+    void init(const QString &interfaceName);
+
+    const QString &interfaceID() const;
+
+    void setComponentCompleted();
+
+    bool isComponentCompleted() const;
+
+    Q_SIGNAL void componentCompleted();
+
+protected:
+    friend class ModelQMLImplementationBase;
+
+private:
+    QString m_implementationID = "Undefined";
+    QString m_interfaceName;
+
+    bool m_componentCompleted = false;
+
+};
 
 // void registerInterfaceImplementationInstance(InterfaceBase & i)
 // {
 //     facelift::ServiceRegistry::instance().registerObject(&i);
 // }
 
+FaceliftModelLib_EXPORT void registerInterfaceImplementationInstance(InterfaceBase & i);
+
 }
+
+Q_DECLARE_METATYPE(facelift::InterfaceBase *)
