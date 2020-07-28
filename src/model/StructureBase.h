@@ -38,7 +38,7 @@
 #include <array>
 
 #include "FaceliftCommon.h"
-#include "FaceliftStringConversion.h"
+#include "StringConversionHandler.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT

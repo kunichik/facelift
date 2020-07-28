@@ -35,7 +35,7 @@
 #include "FaceliftCommon.h"
 #include "FaceliftModel.h"
 
-#include "FaceliftStringConversion.h"
+#include "StringConversionHandler.h"
 
 #include "TProperty.h"
 

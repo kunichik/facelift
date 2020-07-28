@@ -32,7 +32,7 @@
 
 #include "ipc-common.h"
 #include "QMLAdapter.h"
-#include "FaceliftStringConversion.h"
+#include "StringConversionHandler.h"
 #include "span.h"
 
 #if defined(FaceliftIPCCommonLib_LIBRARY)

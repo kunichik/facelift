@@ -8,7 +8,7 @@ facelift_add_library(FaceliftModelLib
         ModuleBase.cpp
         QMLModel.cpp
         FaceliftEnum.cpp
-        FaceliftStringConversion.cpp
+        StringConversionHandler.cpp
         PropertyVerifier.cpp
         TAsyncAnswerMasterBase.cpp
         PropertyInit.cpp
@@ -26,7 +26,7 @@ facelift_add_library(FaceliftModelLib
         StructQObjectWrapper.h
         QMLModel.h
         ModelProperty.h
-        FaceliftStringConversion.h
+        StringConversionHandler.h
         FaceliftConversion.h
         FaceliftCommon.h
         FaceliftEnum.h
