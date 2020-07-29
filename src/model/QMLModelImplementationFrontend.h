@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,14 +28,44 @@
 **
 **********************************************************************/
 
-#include "QMLModel.h"
+#pragma once
+
+#include "QMLModelImplementationFrontendBase.h"
 
 namespace facelift {
 
-Q_LOGGING_CATEGORY(LogGeneral, "facelift.general")
-Q_LOGGING_CATEGORY(LogModel, "facelift.model")
+template<typename QMLModelImplementationType>
+class QMLModelImplementationFrontend : public QMLModelImplementationFrontendBase
+{
 
-QQmlEngine *QMLModelImplementationFrontendBase::s_engine = nullptr;
+protected:
+    QMLModelImplementationFrontend()
+    {
+    }
+
+    template<typename ModelImplClass, typename InterfaceType>
+    ModelImplClass *createComponent(QQmlEngine *engine, InterfaceType *frontend)
+    {
+        auto path = ModelImplClass::modelImplementationFilePath();
+        // Save the reference to the frontend which we are currently creating, so that the QML model implementation is able
+        // to access it from its constructor
+        ModelImplClass::setFrontendUnderConstruction(frontend);
+        ModelImplClass *r = nullptr;
+        qCDebug(LogModel) << "Creating QML component from file : " << path;
+        QQmlComponent component(engine, QUrl::fromLocalFile(path));
+        if (!component.isError()) {
+            QObject *object = component.create();
+            r = qobject_cast<ModelImplClass *>(object);
+        } else {
+            qCWarning(LogModel) << "Error : " << component.errorString();
+            qFatal("Can't create QML model");
+        }
+        return r;
+    }
+
+    QMLModelImplementationType *m_impl = nullptr;
+
+};
 
 
 }

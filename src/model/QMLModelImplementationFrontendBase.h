@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,14 +28,18 @@
 **
 **********************************************************************/
 
-#include "QMLModel.h"
+#pragma once
+
+#include <QQmlEngine>
 
 namespace facelift {
 
-Q_LOGGING_CATEGORY(LogGeneral, "facelift.general")
-Q_LOGGING_CATEGORY(LogModel, "facelift.model")
-
-QQmlEngine *QMLModelImplementationFrontendBase::s_engine = nullptr;
+class FaceliftModelLib_EXPORT QMLModelImplementationFrontendBase
+{
+protected:
+    QQmlEngine *qmlEngine();
+    static QQmlEngine *s_engine;
+};
 
 
 }

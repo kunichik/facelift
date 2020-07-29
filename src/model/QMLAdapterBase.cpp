@@ -29,7 +29,6 @@
 **********************************************************************/
 
 #include "QMLAdapterBase.h"
-//#include "ServiceRegistry.h"
 
 namespace facelift {
 

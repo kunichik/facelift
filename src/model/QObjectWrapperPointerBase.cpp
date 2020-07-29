@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,14 +28,26 @@
 **
 **********************************************************************/
 
-#include "QMLModel.h"
+#pragma once
+
+#include "QObjectWrapperPointerBase.h"
 
 namespace facelift {
 
-Q_LOGGING_CATEGORY(LogGeneral, "facelift.general")
-Q_LOGGING_CATEGORY(LogModel, "facelift.model")
 
-QQmlEngine *QMLModelImplementationFrontendBase::s_engine = nullptr;
+void QObjectWrapperPointerBase::addConnection(QMetaObject::Connection connection)
+{
+    m_connections.append(connection);
+}
+
+void QObjectWrapperPointerBase::disconnect()
+{
+    for (const auto &connection : m_connections) {
+        auto successfull = QObject::disconnect(connection);
+        Q_ASSERT(successfull);
+    }
+    m_connections.clear();
+}
 
 
 }

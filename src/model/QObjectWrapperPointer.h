@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,14 +28,44 @@
 **
 **********************************************************************/
 
-#include "QMLModel.h"
+#pragma once
+
+
+#include "QObjectWrapperPointerBase.h"
 
 namespace facelift {
 
-Q_LOGGING_CATEGORY(LogGeneral, "facelift.general")
-Q_LOGGING_CATEGORY(LogModel, "facelift.model")
+template<typename StructQMLWrapperType>
+class QObjectWrapperPointer : public QObjectWrapperPointerBase
+{
 
-QQmlEngine *QMLModelImplementationFrontendBase::s_engine = nullptr;
+public:
+    bool isSet() const
+    {
+        return !m_pointer.isNull();
+    }
+
+    void reset(StructQMLWrapperType *p)
+    {
+        disconnect();
+        m_pointer = p;
+    }
+
+    void clear()
+    {
+        disconnect();
+        m_pointer = nullptr;
+    }
+
+    StructQMLWrapperType *object() const
+    {
+        return m_pointer.data();
+    }
+
+private:
+    QPointer<StructQMLWrapperType> m_pointer;
+
+};
 
 
 }
