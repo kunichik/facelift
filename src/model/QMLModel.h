@@ -30,15 +30,6 @@
 
 #pragma once
 
-
-//#include "FaceliftModel.h"
-//#include "QMLAdapter.h"
-//#include "ModelProperty.h"
-
-//#include "StructQObjectWrapper.h"
-
-// TODO: remove from header
-//#include "FaceliftConversion.h"
 #include "ModelQMLImplementation.h"
 #include "QMLModelImplementationFrontend.h"
 #include "QObjectWrapperPointer.h"
