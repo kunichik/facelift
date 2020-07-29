@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -28,21 +28,44 @@
 **
 **********************************************************************/
 
-#include "FaceliftModel.h"
-#include "ServiceRegistry.h"
+#pragma once
 
-#include <QTimer>
+#include <QObject>
+
+#include "ModelListModelBase.h"
+#include "FaceliftModel.h"
 
 namespace facelift {
 
-// void InterfaceBase::init(const QString &interfaceName)
-// {
-//     m_interfaceName = interfaceName;
-// }
+template<typename ElementType>
+class ModelListModel : public ModelListModelBase
+{
+public:
+    typedef ElementType (QObject::*ElementGetterFunction)(size_t);
 
-// void registerInterfaceImplementationInstance(InterfaceBase & i)
-// {
-//     facelift::ServiceRegistry::instance().registerObject(&i);
-// }
+    ModelListModel()
+    {
+    }
+
+    QVariant data(const QModelIndex &index, int role) const override
+    {
+        Q_UNUSED(role);
+        auto element = m_property->elementAt(index.row());
+        return QVariant::fromValue(element);
+    }
+
+    void setModelProperty(facelift::Model<ElementType> &property)
+    {
+        if (m_property != &property) {
+            m_property = &property;
+            ModelListModelBase::setModelProperty(property);
+        }
+    }
+
+private:
+    facelift::Model<ElementType> *m_property = nullptr;
+
+};
+
 
 }

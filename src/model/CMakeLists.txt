@@ -1,8 +1,6 @@
 
 facelift_add_library(FaceliftModelLib
     SOURCES
-        FaceliftModel.cpp
-        QMLAdapter.cpp
         ServiceWrapper.cpp
         StructureBase.cpp
         ModuleBase.cpp
@@ -16,6 +14,8 @@ facelift_add_library(FaceliftModelLib
         ServiceRegistry.cpp
         InterfaceBase.cpp
         PropertyBase.cpp
+        QMLAdapterBase.cpp
+        ModelListModelBase.cpp
     HEADERS
         FaceliftModel.h
         QMLAdapter.h
@@ -48,6 +48,11 @@ facelift_add_library(FaceliftModelLib
         ListProperty.h
         PropertyConnector.h
         QMLModelTypeHandler.h
+        QMLAdapterBase.h
+        QMLAdapterByReference.h
+        TQMLAdapter.h
+        ModelListModelBase.h
+        ModelListModel.h
     LINK_LIBRARIES
         Qt5::Qml
         Qt5::Quick

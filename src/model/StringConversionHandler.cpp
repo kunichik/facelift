@@ -28,7 +28,7 @@
 **
 **********************************************************************/
 
-#include "FaceliftStringConversion.h"
+#include "StringConversionHandler.h"
 
 namespace facelift {
 
