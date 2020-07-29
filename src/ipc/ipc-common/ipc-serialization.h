@@ -37,7 +37,7 @@
 #endif
 
 #include "ipc-common.h"
-#include "StructureBase.h"
+#include "Structure.h"
 #include "FaceliftUtils.h"
 #include "ModelProperty.h"
 #include <tuple>

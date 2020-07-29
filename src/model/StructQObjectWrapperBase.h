@@ -30,9 +30,7 @@
 
 #pragma once
 
-#include <QVariant>
-
-#include "FaceliftCommon.h"
+#include <QObject>
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -42,40 +40,18 @@
 
 namespace facelift {
 
-class FaceliftModelLib_EXPORT StructureBase
+
+class FaceliftModelLib_EXPORT StructQObjectWrapperBase : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
 
 public:
-    // Q_PROPERTIES defined here are not visible in subclasses, for some reason (Qt bug ?)
-
-    static constexpr int ROLE_ID = 1000;
-    static constexpr int ROLE_BASE = ROLE_ID + 1;
-
-    StructureBase();
-
-    virtual ~StructureBase();
-
-    template<typename T = QVariant>
-    T userData() const
-    {
-        if (!m_userData.canConvert<T>()) {
-            qCCritical(LogModel) << "Cannot convert type" << m_userData.typeName()
-                        << "to" << QVariant::fromValue(T()).typeName();
-        }
-        return m_userData.value<T>();
-    }
-
-    template<typename T>
-    void setUserData(const T &value)
-    {
-        m_userData.setValue<T>(value);
-    }
-
-protected:
-    QVariant m_userData;
+    StructQObjectWrapperBase(QObject *parent = nullptr);
+    /**
+     * This signal is triggered when one of the fields has changed
+     */
+    Q_SIGNAL void anyFieldChanged();
 };
 
 
 }
-

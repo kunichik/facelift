@@ -36,7 +36,7 @@
 
 #include "FaceliftModel.h"
 #include "ModelProperty.h"
-#include "StructureBase.h"
+#include "Structure.h"
 
 #include <QJsonObject>
 #include <QJsonDocument>

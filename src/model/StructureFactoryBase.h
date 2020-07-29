@@ -30,9 +30,10 @@
 
 #pragma once
 
-#include <QVariant>
+#include <QObject>
+#include <QQmlEngine>
 
-#include "FaceliftCommon.h"
+#include "StringConversionHandler.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -42,38 +43,22 @@
 
 namespace facelift {
 
-class FaceliftModelLib_EXPORT StructureBase
+
+class FaceliftModelLib_EXPORT StructureFactoryBase : public QObject
 {
-    Q_GADGET
+
+    Q_OBJECT
 
 public:
-    // Q_PROPERTIES defined here are not visible in subclasses, for some reason (Qt bug ?)
+    StructureFactoryBase(QQmlEngine *engine);
 
-    static constexpr int ROLE_ID = 1000;
-    static constexpr int ROLE_BASE = ROLE_ID + 1;
-
-    StructureBase();
-
-    virtual ~StructureBase();
-
-    template<typename T = QVariant>
-    T userData() const
+    template<typename Type>
+    static QObject *getter(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
     {
-        if (!m_userData.canConvert<T>()) {
-            qCCritical(LogModel) << "Cannot convert type" << m_userData.typeName()
-                        << "to" << QVariant::fromValue(T()).typeName();
-        }
-        return m_userData.value<T>();
+        Q_UNUSED(jsEngine);
+        return new Type(qmlEngine);
     }
 
-    template<typename T>
-    void setUserData(const T &value)
-    {
-        m_userData.setValue<T>(value);
-    }
-
-protected:
-    QVariant m_userData;
 };
 
 

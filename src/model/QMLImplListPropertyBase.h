@@ -30,9 +30,14 @@
 
 #pragma once
 
-#include <QVariant>
 
-#include "FaceliftCommon.h"
+#include <QObject>
+
+//#include "ModelProperty.h"
+//#include "FaceliftConversion.h"
+//#include "FaceliftQMLUtils.h"
+
+//#include "StructQObjectWrapperBase.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
@@ -42,40 +47,22 @@
 
 namespace facelift {
 
-class FaceliftModelLib_EXPORT StructureBase
+
+class FaceliftModelLib_EXPORT QMLImplListPropertyBase : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
 
 public:
-    // Q_PROPERTIES defined here are not visible in subclasses, for some reason (Qt bug ?)
+    Q_INVOKABLE virtual int size() const = 0;
 
-    static constexpr int ROLE_ID = 1000;
-    static constexpr int ROLE_BASE = ROLE_ID + 1;
+    Q_PROPERTY(QList<QVariant> content READ elementsAsVariant WRITE setElementsAsVariant NOTIFY elementsChanged)
 
-    StructureBase();
+    Q_SIGNAL void elementsChanged();
 
-    virtual ~StructureBase();
+    virtual QList<QVariant> elementsAsVariant() const = 0;
+    virtual void setElementsAsVariant(const QList<QVariant> &list) = 0;
 
-    template<typename T = QVariant>
-    T userData() const
-    {
-        if (!m_userData.canConvert<T>()) {
-            qCCritical(LogModel) << "Cannot convert type" << m_userData.typeName()
-                        << "to" << QVariant::fromValue(T()).typeName();
-        }
-        return m_userData.value<T>();
-    }
-
-    template<typename T>
-    void setUserData(const T &value)
-    {
-        m_userData.setValue<T>(value);
-    }
-
-protected:
-    QVariant m_userData;
 };
 
 
 }
-

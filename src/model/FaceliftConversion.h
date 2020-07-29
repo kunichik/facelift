@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2019 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -30,10 +30,12 @@
 
 #pragma once
 
+#include <QDataStream>
+
 #include "FaceliftCommon.h"
 #include "FaceliftModel.h"
 #include "FaceliftUtils.h"
-#include "StructureBase.h"
+#include "Structure.h"
 
 namespace facelift {
 
