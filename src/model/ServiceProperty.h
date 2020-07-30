@@ -31,6 +31,7 @@
 #pragma once
 
 #include "TProperty.h"
+#include "ServicePropertyInterface.h"
 
 namespace facelift {
 

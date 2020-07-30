@@ -36,7 +36,7 @@
 #include <functional>
 
 #include "PropertyBase.h"
-
+#include "PropertyInterface.h"
 
 namespace facelift {
 
