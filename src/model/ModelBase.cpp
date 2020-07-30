@@ -96,4 +96,5 @@ void ModelBase::setSize(int size)
     m_size = size;
 }
 
+
 }

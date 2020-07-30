@@ -33,13 +33,6 @@
 #include <QObject>
 #include <QVariantMap>
 
-//#include "ModelProperty.h"
-//#include "FaceliftConversion.h"
-//#include "FaceliftQMLUtils.h"
-//
-//#include "StructQObjectWrapperBase.h"
-//#include "QMLImplListProperty.h"
-
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
 #else

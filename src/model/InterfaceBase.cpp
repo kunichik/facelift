@@ -78,4 +78,5 @@ void registerInterfaceImplementationInstance(InterfaceBase & i)
     facelift::ServiceRegistry::instance().registerObject(&i);
 }
 
+
 }

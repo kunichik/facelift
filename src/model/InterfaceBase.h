@@ -35,10 +35,7 @@
 
 #include <QObject>
 #include <QMap>
-//include <qqml.h>
-//
-//include "FaceliftCommon.h"
-//include "AsyncAnswer.h"
+
 #include "ServiceRegistry.h"
 
 #if defined(FaceliftModelLib_LIBRARY)

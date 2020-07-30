@@ -1,6 +1,6 @@
 /**********************************************************************
 **
-** Copyright (C) 2018 Luxoft Sweden AB
+** Copyright (C) 2020 Luxoft Sweden AB
 **
 ** This file is part of the FaceLift project
 **
@@ -48,5 +48,6 @@ struct PropertyConnector
     }
 
 };
+
 
 }
