@@ -43,6 +43,9 @@ facelift_add_library(FaceliftIPCCommonLib
         InputPayLoad.h
         OutputPayLoad.h
         DBusSignatureHelper.h
+        IPCTypeRegisterHandler.h
+        AppendDBUSSignatureFunction.h
+        SerializeParameterFunction.h
     LINK_LIBRARIES FaceliftModelLib FaceliftCommonLib
     MONOLITHIC_SUPPORTED
 )

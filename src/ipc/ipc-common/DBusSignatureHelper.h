@@ -36,32 +36,10 @@
 #  define FaceliftIPCCommonLib_EXPORT Q_DECL_IMPORT
 #endif
 
-//#include "ipc-common.h"
-//#include "FaceliftUtils.h"
-//#include "ModelProperty.h"
+#include "IPCTypeHandler.h"
 #include <tuple>
 
 namespace facelift {
-
-template<typename Type, typename Enable = void>
-struct IPCTypeHandler
-{
-    static void writeDBUSSignature(QTextStream &s)
-    {
-        s << "i";
-    }
-
-    static void write(OutputPayLoad &msg, const Type &v)
-    {
-        msg.writeSimple(v);
-    }
-
-    static void read(InputPayLoad &msg, Type &v)
-    {
-        msg.readNextParameter(v);
-    }
-
-};
 
 class FaceliftIPCCommonLib_EXPORT DBusSignatureHelper {
 

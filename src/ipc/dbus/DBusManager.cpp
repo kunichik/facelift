@@ -64,11 +64,20 @@ bool DBusManager::registerServiceName(const QString &serviceName)
     return success;
 }
 
-
-
 QString DBusManager::serviceName() const
 {
     return m_busConnection.baseService();
+}
+
+bool DBusManager::isDBusConnected() const
+{
+    return m_dbusConnected;
+}
+
+
+QDBusConnection &DBusManager::connection()
+{
+    return m_busConnection;
 }
 
 } // end namespace dbus

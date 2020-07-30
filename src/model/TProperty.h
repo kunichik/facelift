@@ -32,7 +32,10 @@
 
 #include <QString>
 #include <QObject>
+
 #include <functional>
+
+#include "TProperty.h"
 
 namespace facelift {
 

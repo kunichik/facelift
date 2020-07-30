@@ -38,41 +38,30 @@
 
 #include <tuple>
 
-#include "ipc-common.h"
-#include "InputPayLoad.h"
 #include "OutputPayLoad.h"
-#include "Structure.h"
-#include "FaceliftUtils.h"
-#include "ModelProperty.h"
 #include "IPCTypeHandler.h"
-#include "SerializeParameterFunction.h"
+#include "IPCTypeRegisterHandler.h"
 
 namespace facelift {
 
-template<typename Type>
-OutputPayLoad &operator<<(OutputPayLoad &msg, const Type &v)
+template<typename ParentType>
+struct SerializeParameterFunction
 {
-    IPCTypeHandler<Type>::write(msg, v);
-    return msg;
-}
+    SerializeParameterFunction(OutputPayLoad &msg, const ParentType &parent) :
+        m_msg(msg),
+        m_parent(parent)
+    {
+    }
 
+    OutputPayLoad &m_msg;
+    const ParentType &m_parent;
 
-template<typename Type>
-InputPayLoad &operator>>(InputPayLoad &msg, Type &v)
-{
-    IPCTypeHandler<Type>::read(msg, v);
-    return msg;
-}
-
-
-template<typename Type>
-InputPayLoad &operator>>(InputPayLoad &msg, Property<Type> &property)
-{
-    Type v;
-    IPCTypeHandler<Type>::read(msg, v);
-    property.setValue(v);
-    return msg;
-}
-
+    template<typename Type>
+    void operator()(const Type &v)
+    {
+        IPCTypeHandler<typename IPCTypeRegisterHandler<Type>::SerializedType>::write(m_msg,
+                IPCTypeRegisterHandler<Type>::convertToSerializedType(v, m_parent));
+    }
+};
 
 }

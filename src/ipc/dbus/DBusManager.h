@@ -54,17 +54,11 @@ public:
 
     static DBusManager &instance();
 
-    bool isDBusConnected() const
-    {
-        return m_dbusConnected;
-    }
+    bool isDBusConnected() const;
 
     bool registerServiceName(const QString &serviceName);
 
-    QDBusConnection &connection()
-    {
-        return m_busConnection;
-    }
+    QDBusConnection &connection();
 
     QString serviceName() const;
 

@@ -36,43 +36,33 @@
 #  define FaceliftIPCCommonLib_EXPORT Q_DECL_IMPORT
 #endif
 
+
+#include <QTextStream>
+
 #include <tuple>
 
-#include "ipc-common.h"
-#include "InputPayLoad.h"
-#include "OutputPayLoad.h"
-#include "Structure.h"
 #include "FaceliftUtils.h"
-#include "ModelProperty.h"
-#include "IPCTypeHandler.h"
-#include "SerializeParameterFunction.h"
 
 namespace facelift {
 
-template<typename Type>
-OutputPayLoad &operator<<(OutputPayLoad &msg, const Type &v)
+struct FaceliftIPCCommonLib_EXPORT AppendDBUSSignatureFunction
 {
-    IPCTypeHandler<Type>::write(msg, v);
-    return msg;
-}
+    AppendDBUSSignatureFunction(QTextStream &s) :
+        s(s)
+    {
+    }
 
+    QTextStream &s;
 
-template<typename Type>
-InputPayLoad &operator>>(InputPayLoad &msg, Type &v)
-{
-    IPCTypeHandler<Type>::read(msg, v);
-    return msg;
-}
-
-
-template<typename Type>
-InputPayLoad &operator>>(InputPayLoad &msg, Property<Type> &property)
-{
-    Type v;
-    IPCTypeHandler<Type>::read(msg, v);
-    property.setValue(v);
-    return msg;
-}
+    template<typename T>
+    void operator()(T &&t)
+    {
+        Q_UNUSED(t);
+        typedef typename std::decay<T>::type TupleType;
+        std::tuple<TupleType> dummyTuple;
+        appendDBUSTypeSignature(s, dummyTuple);
+    }
+};
 
 
 }
