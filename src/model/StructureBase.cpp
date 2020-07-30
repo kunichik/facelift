@@ -34,13 +34,8 @@ namespace facelift {
 
 constexpr int StructureBase::ROLE_ID;
 
-StructureBase::StructureBase()
-{
-}
-
-StructureBase::~StructureBase()
-{
-}
+StructureBase::StructureBase() = default;
+StructureBase::~StructureBase() = default;
 
 
 }

@@ -49,9 +49,7 @@ class Structure : public StructureBase
 {
 
 public:
-    virtual ~Structure()
-    {
-    }
+    virtual ~Structure() = default;
 
     typedef std::tuple<FieldTypes ...> FieldTupleTypes;
     static constexpr size_t FieldCount = sizeof ... (FieldTypes);

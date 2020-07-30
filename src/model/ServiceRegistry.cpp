@@ -32,9 +32,7 @@
 
 namespace facelift {
 
-ServiceRegistry::~ServiceRegistry()
-{
-}
+ServiceRegistry::~ServiceRegistry() = default;
 
 void ServiceRegistry::registerObject(InterfaceBase *i)
 {

@@ -36,10 +36,6 @@
 #include <QObject>
 
 #include "TAsyncAnswerMasterBase.h"
-//#include <QDebug>
-//#include <QPointer>
-//
-//#include "FaceliftCommon.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
