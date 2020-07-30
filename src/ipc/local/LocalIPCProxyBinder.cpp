@@ -28,35 +28,22 @@
 **
 **********************************************************************/
 
-#include "LocalIPCMessage.h"
-
 #include <QObject>
 #include <QTimer>
 
-//#include "FaceliftModel.h"
-#include "FaceliftUtils.h"
-//#include "ModelProperty.h"
-//
-//#include "QMLAdapter.h"
-//#include "QMLModel.h"
 
+#include "LocalIPCMessage.h"
+#include "FaceliftUtils.h"
 #include "LocalIPCProxy.h"
 #include "LocalIPC-serialization.h"
 #include "LocalIPCRegistry.h"
+#include "FaceliftIPCCommon.h"
 
 
 namespace facelift {
 namespace local {
 
-struct FaceliftIPCLocalLib_EXPORT FaceliftIPCCommon
-{
-    static constexpr const char *GET_PROPERTIES_MESSAGE_NAME = "GetAllProperties";
-    static constexpr const char *PROPERTIES_CHANGED_SIGNAL_NAME = "PropertiesChanged";
-    static constexpr const char *SIGNAL_TRIGGERED_SIGNAL_NAME = "SignalTriggered";
-    static constexpr const char *SET_PROPERTY_MESSAGE_NAME = "SetProperty";
-};
-
-constexpr const char *FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME;
+//constexpr const char *FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME;
 
 
 LocalIPCProxyBinder::LocalIPCProxyBinder(InterfaceBase &owner, QObject *parent) :
