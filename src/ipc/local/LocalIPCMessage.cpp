@@ -33,17 +33,7 @@
 #include <QObject>
 #include <QTextStream>
 
-//#include "FaceliftModel.h"
-//#include "FaceliftUtils.h"
-//#include "ModelProperty.h"
-//
-//#include "QMLAdapter.h"
-//#include "QMLModel.h"
-//
-//#include "LocalIPCProxy.h"
 #include "LocalIPC-serialization.h"
-//#include "LocalIPCRegistry.h"
-
 
 namespace facelift {
 namespace local {

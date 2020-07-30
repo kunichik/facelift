@@ -43,9 +43,6 @@
 namespace facelift {
 namespace local {
 
-//constexpr const char *FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME;
-
-
 LocalIPCProxyBinder::LocalIPCProxyBinder(InterfaceBase &owner, QObject *parent) :
     IPCProxyBinderBase(owner, parent)
 {

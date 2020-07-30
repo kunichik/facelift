@@ -74,6 +74,10 @@ facelift_add_library(FaceliftModelLib
         QMLImplMapProperty.h
         StructureFactoryBase.h
         Structure.h
+        TypeHandler.h
+        TypeHandlerBase.h
+        BinarySeralizer.h
+        StructTypeHandler.h
     LINK_LIBRARIES
         Qt5::Qml
         Qt5::Quick

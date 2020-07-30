@@ -46,7 +46,6 @@ namespace facelift {
 namespace local {
 
 
-
 template<typename Type>
 inline void LocalIPCServiceAdapterBase::serializeValue(LocalIPCMessage &msg, const Type &v)
 {
