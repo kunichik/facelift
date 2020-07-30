@@ -45,6 +45,7 @@
 #include "ServicePropertyInterface.h"
 #include "InterfaceBase.h"
 #include "PropertyBase.h"
+#include "ServicePropertyInterface.h"
 
 #if defined(FaceliftModelLib_LIBRARY)
 #  define FaceliftModelLib_EXPORT Q_DECL_EXPORT
