@@ -35,7 +35,8 @@
 
 #include <functional>
 
-#include "TProperty.h"
+#include "PropertyBase.h"
+
 
 namespace facelift {
 
