@@ -42,7 +42,7 @@ struct FaceliftIPCLocalLib_EXPORT FaceliftIPCCommon
     static constexpr const char *SET_PROPERTY_MESSAGE_NAME = "SetProperty";
 };
 
-//constexpr const char *FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME;
+constexpr const char *FaceliftIPCCommon::SIGNAL_TRIGGERED_SIGNAL_NAME;
 
 }
 
