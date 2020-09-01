@@ -1,4 +1,4 @@
-environment:
+
   matrix:
   - COMPILER: MSVC_15
     ARCHITECTURE: x64
