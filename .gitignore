@@ -1,6 +1,4 @@
-*.o
-*.a
-*.prl
+.prl
 *~
 *.orig
 *.rej
