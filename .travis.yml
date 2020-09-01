@@ -5,6 +5,7 @@ git:
   depth: 10
 
 matrix:
+4++
   include:
   - os: linux
     compiler: gcc           # g++-5, Qt5.12.0, IPC enabled
