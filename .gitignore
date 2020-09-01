@@ -1,6 +1,5 @@
 *.o
 *.a
-*.prl
 *~
 *.orig
 *.rej
