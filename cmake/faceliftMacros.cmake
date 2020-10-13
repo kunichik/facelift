@@ -17,12 +17,6 @@ endif()
 include(GNUInstallDirs)    # for standard installation locations
 include(CMakePackageConfigHelpers)
 
-# find_package(PythonInterp) causes some issues if another version has been searched before, and it is not needed anyway on non-Win32 platforms
-if(WIN32)
-    find_package(PythonInterp 3.0 REQUIRED)
-    set(FACELIFT_PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE})
-endif()
-
 if(ENABLE_LTO)
     cmake_minimum_required(VERSION 3.9.0)
     include(CheckIPOSupported)
@@ -216,25 +210,12 @@ function(facelift_generate_code )
         string(REPLACE ";" " " BASE_CODEGEN_COMMAND_WITH_SPACES "${BASE_CODEGEN_COMMAND}")
         message("Calling facelift code generator. Command:\n PYTHONPATH=$ENV{PYTHONPATH} ${FACELIFT_PYTHON_EXECUTABLE} ${BASE_CODEGEN_COMMAND_WITH_SPACES}")
 
-        if(NOT DEFINED ENV{LANG}) # e.g. Qt Creator was started from the Apple Dock
-            set(ENV{LANG} "en_US.UTF-8")
-            # --> http://click.pocoo.org/5/python3/#python-3-surrogate-handling
-            # --> https://apple.stackexchange.com/questions/54765/how-can-i-have-qt-creator-to-recognize-my-environment-variables
-            set(LANG_SET_BY_FACELIFT true)
-        else()
-            set(LANG_SET_BY_FACELIFT false)
-        endif()
-
         execute_process(COMMAND ${FACELIFT_PYTHON_EXECUTABLE} ${BASE_CODEGEN_COMMAND}
             RESULT_VARIABLE CODEGEN_RETURN_CODE
             WORKING_DIRECTORY ${QFACE_BASE_LOCATION}/qface
             OUTPUT_VARIABLE CODEGEN_OUTPUT
             ERROR_VARIABLE CODEGEN_ERROR
         )
-
-        if(LANG_SET_BY_FACELIFT)
-            unset(ENV{LANG})
-        endif()
 
         if(NOT "${CODEGEN_RETURN_CODE}" STREQUAL "0")
             message(FATAL_ERROR "Facelift code generation failed!\nCommand: ${BASE_CODEGEN_COMMAND_WITH_SPACES} with PYTHONPATH=$ENV{PYTHONPATH}\nReturn code: ${CODEGEN_RETURN_CODE}\nOutput: ${CODEGEN_OUTPUT}\nError: ${CODEGEN_ERROR}\n")
@@ -267,11 +248,8 @@ function(facelift_add_interface TARGET_NAME)
 
     set(GENERATED_HEADERS_INSTALLATION_LOCATION ${FACELIFT_GENERATED_HEADERS_INSTALLATION_LOCATION}/${LIBRARY_NAME})
 
-    if(WIN32)
-        set(OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/facelift_generated/${LIBRARY_NAME})  # There is a weird issue on Windows related to the MOC if the generated files are outside of ${CMAKE_CURRENT_BINARY_DIR}
-    else()
-        set(OUTPUT_PATH ${CMAKE_BINARY_DIR}/facelift_generated/${LIBRARY_NAME})  # Keep generated file folder outside of CMAKE_CURRENT_BINARY_DIR to avoid having the MOC generated file inside the same folder, which would cause unnecessary recompiles
-    endif()
+    set(OUTPUT_PATH ${CMAKE_BINARY_DIR}/facelift_generated/${LIBRARY_NAME})  # Keep generated file folder outside of CMAKE_CURRENT_BINARY_DIR to avoid having the MOC generated file inside the same folder, which would cause unnecessary recompiles
+
 
     set(TYPES_OUTPUT_PATH ${OUTPUT_PATH}/types)
     set(DEVTOOLS_OUTPUT_PATH ${OUTPUT_PATH}/devtools)
@@ -975,15 +953,13 @@ function(facelift_add_qml_plugin PLUGIN_NAME)
     file(WRITE ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/qmldir "${QMLDIR_CONTENT}")
     file(WRITE ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/qmldir.installed "${QMLDIR_CONTENT}")
 
-    if(NOT CMAKE_CROSSCOMPILING AND NOT WIN32)
-        # not supported for now on Win32 since the required libraries can't be loaded without setting the PATH variable
-        add_custom_command(
-            OUTPUT  ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes
-            COMMAND ${_qt5Core_install_prefix}/bin/qmlplugindump -noinstantiate ${URI} ${PLUGIN_MAJOR_VERSION}.${PLUGIN_MINOR_VERSION} ${CMAKE_BINARY_DIR}/imports -output ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes || touch ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes
-            DEPENDS ${PLUGIN_NAME}
-        )
-        add_custom_target("generate_qmltypes_${PLUGIN_NAME}" ALL DEPENDS ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes)
-        install(FILES ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes DESTINATION ${INSTALL_PATH})
-    endif()
+    add_custom_command(
+        OUTPUT  ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes
+        COMMAND ${_qt5Core_install_prefix}/bin/qmlplugindump -noinstantiate ${URI} ${PLUGIN_MAJOR_VERSION}.${PLUGIN_MINOR_VERSION} ${CMAKE_BINARY_DIR}/imports -output ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes || touch ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes
+        DEPENDS ${PLUGIN_NAME}
+    )
+    add_custom_target("generate_qmltypes_${PLUGIN_NAME}" ALL DEPENDS ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes)
+    install(FILES ${CMAKE_BINARY_DIR}/${INSTALL_PATH}/plugins.qmltypes DESTINATION ${INSTALL_PATH})
+
 
 endfunction()
